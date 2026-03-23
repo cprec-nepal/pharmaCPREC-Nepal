@@ -137,7 +137,7 @@
   <!-- Main Content -->
   <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
     
-    <!-- STEP 1: AUTH -->
+    <!-- STEP 1: AUTH (UPDATED) -->
     <section id="step-auth" class="fade-in">
       <div class="max-w-md mx-auto">
         <div class="glass-card p-8 sm:p-10 text-center">
@@ -150,6 +150,11 @@
           <div class="space-y-4">
             <input type="email" id="auth-email" class="input-field" placeholder="Enter your email" />
             
+            <!-- PASSWORD FIELD (Initially Hidden) -->
+            <div id="auth-password-group" class="hidden">
+               <input type="password" id="auth-password" class="input-field" placeholder="Enter your password" />
+            </div>
+
             <!-- Referral Code Input (Only for new users) -->
             <div id="referral-input-group" class="hidden">
                <input type="text" id="auth-referral" class="input-field" placeholder="Referral Code (Optional)" />
@@ -159,9 +164,14 @@
               <span id="btn-auth-text">Continue with Email</span>
             </button>
             
-            <div class="pt-4">
-               <button id="btn-toggle-mode" class="text-sm text-[var(--fg-muted)] hover:text-[var(--accent)]">
-                 New user? Request Access
+            <div class="flex justify-between pt-2 text-xs">
+               <!-- Toggle Login Method -->
+               <button id="btn-toggle-method" class="text-[var(--fg-muted)] hover:text-[var(--accent)]">
+                 Login with Password
+               </button>
+               <!-- Toggle Register Mode -->
+               <button id="btn-toggle-mode" class="text-[var(--fg-muted)] hover:text-[var(--accent)]">
+                 New user? Register
                </button>
             </div>
           </div>
@@ -226,7 +236,7 @@
              <p class="text-[var(--fg-muted)] mt-6 text-sm">Select a faculty from the sidebar to start a new quiz session.</p>
           </div>
 
-          <!-- Panel: Settings (COMPLETE) -->
+          <!-- Panel: Settings -->
           <div id="panel-settings" class="glass-card p-6 hidden">
             <h3 class="font-display font-semibold text-xl mb-6">Profile Settings</h3>
             
@@ -330,7 +340,7 @@
 
   </main>
 
-  <!-- OTP Modal -->
+  <!-- OTP Modal (Only for OTP method) -->
   <div id="modal-back" class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-sm z-50 hidden items-center justify-center">
      <div class="glass-card p-8 w-full max-w-sm text-center">
         <h3 class="font-display font-bold text-xl mb-4">Enter Verification Code</h3>
@@ -344,7 +354,8 @@
     
     const $ = id => document.getElementById(id);
     const state = {
-       mode: 'login',
+       mode: 'login', // login | register
+       method: 'otp', // otp | password
        email: '',
        token: '',
        profile: {},
@@ -385,40 +396,88 @@
        ['panel-overview', 'panel-settings', 'panel-history'].forEach(p => $(p).classList.toggle('hidden', p !== id));
     };
 
-    // --- Auth ---
-    $('btn-toggle-mode').onclick = () => {
-       state.mode = state.mode === 'login' ? 'register' : 'login';
-       $('btn-auth-text').innerText = state.mode === 'login' ? 'Continue with Email' : 'Request Access';
-       $('referral-input-group').classList.toggle('hidden', state.mode === 'login');
-       $('btn-toggle-mode').innerText = state.mode === 'login' ? 'New user? Request Access' : 'Have an account? Login';
+    // --- Auth UI Logic ---
+    
+    // Toggle OTP vs Password Mode
+    $('btn-toggle-method').onclick = () => {
+       const isOtp = state.method === 'otp';
+       state.method = isOtp ? 'password' : 'otp';
+       
+       $('auth-password-group').classList.toggle('hidden', isOtp);
+       $('btn-toggle-method').innerText = isOtp ? "Login with OTP" : "Login with Password";
+       
+       // Update main button text
+       if(state.mode === 'login') {
+          $('btn-auth-text').innerText = isOtp ? "Login" : "Continue with Email";
+       }
     };
 
+    // Toggle Login vs Register Mode
+    $('btn-toggle-mode').onclick = () => {
+       const isLogin = state.mode === 'login';
+       state.mode = isLogin ? 'register' : 'login';
+       
+       $('referral-input-group').classList.toggle('hidden', isLogin);
+       $('auth-password-group').classList.add('hidden'); // Always hide password initially on toggle
+       state.method = 'otp'; // Default to OTP
+       
+       $('btn-toggle-mode').innerText = isLogin ? "Have an account? Login" : "New user? Register";
+       $('btn-toggle-method').innerText = "Login with Password";
+       $('btn-auth-text').innerText = isLogin ? "Request Access" : "Continue with Email";
+    };
+
+    // Main Action Button
     $('btn-auth-action').onclick = async () => {
        const email = $('auth-email').value.trim();
-       const ref = $('auth-referral').value.trim();
        if(!email) return toast("Email required", "error");
 
+       state.email = email; // Store in state for later use
+
        if(state.mode === 'register') {
+          // REGISTER FLOW
+          const ref = $('auth-referral').value.trim();
           const res = await api({ type: 'registerUser', email, referralCode: ref, ip: 'web' });
           toast(res.message, res.success ? 'success' : 'error');
-       } else {
-          const res = await api({ type: 'sendCode', email, ip: 'web' });
-          if(res.success) {
-             state.email = email;
-             $('modal-back').classList.remove('hidden');
-             $('modal-back').classList.add('flex');
+       
+       } else if(state.mode === 'login') {
+          
+          if(state.method === 'password') {
+             // PASSWORD LOGIN FLOW
+             const pass = $('auth-password').value;
+             if(!pass) return toast("Password required", "error");
+             
+             const res = await api({ type: 'verifyCode', email, code: pass, method: 'password' });
+             
+             if(res.success) {
+                state.token = res.token;
+                localStorage.setItem('mcq_token', res.token);
+                localStorage.setItem('mcq_email', res.email);
+                initDashboard();
+                toast("Welcome back!", "success");
+             } else {
+                toast(res.message, "error");
+             }
+          
           } else {
-             toast(res.message, 'error');
+             // OTP LOGIN FLOW
+             const res = await api({ type: 'sendCode', email, ip: 'web' });
+             if(res.success) {
+                $('modal-back').classList.remove('hidden');
+                $('modal-back').classList.add('flex');
+                toast("Code sent to your email", "success");
+             } else {
+                toast(res.message, 'error');
+             }
           }
        }
     };
 
+    // Verify OTP from Modal
     $('btn-verify-otp').onclick = async () => {
        const code = $('input-otp').value.trim();
        const res = await api({ type: 'verifyCode', email: state.email, code });
        if(res.success) {
           state.token = res.token;
-          state.email = res.email;
           localStorage.setItem('mcq_token', res.token);
           localStorage.setItem('mcq_email', res.email);
           $('modal-back').classList.add('hidden');
