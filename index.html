@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="description" content="MCQ Master - Professional Quiz Platform for CPREC Nepal" />
+  <title>MCQ Master | CPREC Nepal</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Space Grotesk', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  
+  <style>
+    :root {
+      --bg: #0a0f1a;
+      --bg-elevated: #111827;
+      --fg: #f8fafc;
+      --fg-muted: #94a3b8;
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.25);
+      --card: rgba(17, 24, 39, 0.85);
+      --card-border: rgba(148, 163, 184, 0.1);
+      --success: #22c55e;
+      --error: #ef4444;
+      --warning: #f59e0b;
+    }
+
+    .light-mode {
+      --bg: #f1f5f9;
+      --bg-elevated: #ffffff;
+      --fg: #0f172a;
+      --fg-muted: #64748b;
+      --accent: #059669;
+      --accent-glow: rgba(5, 150, 105, 0.15);
+      --card: rgba(255, 255, 255, 0.9);
+      --card-border: rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    /* --- AMBIENT BACKGROUND --- */
+    .mesh-gradient {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background: var(--bg);
+      overflow: hidden;
+    }
+    .mesh-gradient::before {
+      content: '';
+      position: absolute;
+      width: 150%; height: 150%;
+      top: -25%; left: -25%;
+      background: 
+        radial-gradient(ellipse at 20% 30%, var(--accent-glow) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(99, 102, 241, 0.12) 0%, transparent 50%);
+      animation: meshMove 25s ease-in-out infinite;
+    }
+    .grid-pattern {
+      position: fixed; inset: 0; z-index: -1;
+      background-image: linear-gradient(var(--card-border) 1px, transparent 1px),
+                        linear-gradient(90deg, var(--card-border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.3;
+      mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+    }
+
+    @keyframes meshMove {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(20px, -20px) rotate(3deg); }
+    }
+
+    /* --- COMPONENTS --- */
+    .glass-card {
+      background: var(--card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .heading-xl { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; letter-spacing: -0.02em; }
+    
+    .input-field {
+      width: 100%; padding: 1rem 1.25rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid var(--card-border);
+      border-radius: 14px; font-size: 1rem; color: var(--fg);
+      transition: all 0.25s ease; font-family: inherit;
+    }
+    .input-field::placeholder { color: var(--fg-muted); opacity: 0.7; }
+    .input-field:focus { background: rgba(255,255,255,0.05); border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-glow); }
+    .light-mode .input-field { background: rgba(0,0,0,0.02); }
+    .light-mode .input-field:focus { background: white; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 0.875rem 1.5rem;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 0.95rem;
+      border: none; border-radius: 12px; cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative; overflow: hidden;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--accent) 0%, #059669 100%); color: white; box-shadow: 0 4px 14px var(--accent-glow); }
+    .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 25px var(--accent-glow); }
+    .btn-secondary { background: var(--bg-elevated); color: var(--fg); border: 2px solid var(--card-border); }
+    .btn-secondary:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+    .option-card {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1.125rem 1.25rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 2px solid var(--card-border);
+      border-radius: 16px; cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); font-weight: 500;
+    }
+    .option-card:hover:not(.disabled) { border-color: var(--accent); background: rgba(16, 185, 129, 0.05); transform: translateX(4px); }
+    .option-card.selected { border-color: var(--accent); background: rgba(16, 185, 129, 0.1); }
+    .option-card.correct { border-color: var(--success); background: rgba(34, 197, 94, 0.1); }
+    .option-card.wrong { border-color: var(--error); background: rgba(239, 68, 68, 0.1); opacity: 0.8; }
+    .option-card.disabled { pointer-events: none; }
+    
+    .option-marker {
+      width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+      background: rgba(255, 255, 255, 0.05); border-radius: 10px;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--fg-muted);
+      flex-shrink: 0; transition: all 0.25s ease;
+    }
+    .option-card.selected .option-marker { background: var(--accent); color: white; }
+    .option-card.correct .option-marker { background: var(--success); color: white; }
+    .option-card.wrong .option-marker { background: var(--error); color: white; }
+
+    .progress-track { height: 8px; background: rgba(255,255,255,0.1); border-radius: 999px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent) 0%, #34d399 100%); border-radius: 999px; transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+    .progress-fill::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shimmer 2s infinite; }
+    
+    @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+    .fade-in { animation: slideUp 0.5s ease forwards; }
+    .shake { animation: shake 0.3s ease-in-out; }
+
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 100; opacity: 0; visibility: hidden; transition: all 0.3s; }
+    .modal-backdrop.active { opacity: 1; visibility: visible; }
+    .modal-content { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); z-index: 101; width: 90%; max-width: 440px; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    .modal-backdrop.active + .modal-content, .modal-content.active { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+
+    .toast-container { position: fixed; top: 1.5rem; right: 1.5rem; z-index: 200; display: flex; flex-direction: column; gap: 0.75rem; }
+    .toast { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; background: var(--bg-elevated); border: 1px solid var(--card-border); border-radius: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); animation: slideUp 0.4s ease; max-width: 320px; }
+    .toast.success { border-left: 4px solid var(--success); }
+    .toast.error { border-left: 4px solid var(--error); }
+
+    select.input-field { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.25rem; padding-right: 3rem; }
+
+    .theme-toggle { width: 48px; height: 28px; background: rgba(255,255,255,0.1); border-radius: 999px; position: relative; cursor: pointer; transition: background 0.3s; }
+    .theme-toggle::after { content: ''; position: absolute; width: 22px; height: 22px; background: var(--accent); border-radius: 50%; top: 3px; left: 3px; transition: transform 0.3s; }
+    .light-mode .theme-toggle::after { transform: translateX(20px); }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="mesh-gradient"></div>
+  <div class="grid-pattern"></div>
+
+  <!-- Toasts -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-50 backdrop-blur-xl border-b border-[var(--card-border)]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center text-white font-bold text-lg">M</div>
+        <div>
+          <h1 class="font-display font-bold text-lg leading-tight">MCQ Master</h1>
+          <p class="text-xs text-[var(--fg-muted)]">CPREC Nepal</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div id="user-badge" class="hidden items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--accent)] bg-opacity-10 border border-[var(--accent)] border-opacity-30">
+          <div class="w-6 h-6 rounded-full bg-[var(--accent)] flex items-center justify-center text-white text-xs font-bold" id="user-avatar">U</div>
+          <span class="text-sm font-medium text-[var(--accent)] max-w-[120px] truncate" id="user-email-display">user@email.com</span>
+        </div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme"></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+    
+    <!-- STEP 1: AUTH -->
+    <section id="step-auth" class="fade-in">
+      <div class="max-w-md mx-auto">
+        <div class="glass-card p-8 sm:p-10 text-center">
+          <div class="w-16 h-16 mx-auto rounded-2xl bg-[var(--accent)] bg-opacity-10 flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+          </div>
+          <h2 class="heading-xl mb-2">Welcome</h2>
+          <p class="text-[var(--fg-muted)] mb-8">Enter your email to login or request access.</p>
+          
+          <div class="space-y-4">
+            <input type="email" id="auth-email" class="input-field" placeholder="your.email@example.com" />
+            <button id="btn-auth-action" class="btn btn-primary w-full py-4">
+              <span id="btn-auth-text">Continue with Email</span>
+              <svg id="btn-spinner" class="hidden animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            </button>
+            
+            <!-- Toggle for Password/OTP if needed later, simplified for now -->
+            <div class="pt-4 border-t border-[var(--card-border)]">
+               <button id="btn-toggle-mode" class="text-sm text-[var(--fg-muted)] hover:text-[var(--accent)]">
+                 New user? Request Access
+               </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2: DASHBOARD -->
+    <section id="step-dashboard" class="hidden">
+      <div class="grid lg:grid-cols-[320px_1fr] gap-6 items-start">
+        
+        <!-- Sidebar -->
+        <aside class="glass-card p-6 lg:sticky lg:top-24 space-y-6">
+          <div>
+            <h3 class="font-display font-semibold text-lg mb-4">Settings</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-[var(--fg-muted)] mb-2">Faculty</label>
+                <select id="filter-faculty" class="input-field"><option value="">Loading...</option></select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-[var(--fg-muted)] mb-2">Level</label>
+                <select id="filter-level" class="input-field"><option value="">All Levels</option></select>
+              </div>
+            </div>
+          </div>
+          
+          <div class="space-y-3 pt-4 border-t border-[var(--card-border)]">
+            <button id="btn-start-quiz" class="btn btn-primary w-full" disabled>Start Quiz</button>
+            <button id="btn-view-all" class="btn btn-secondary w-full" disabled>View Questions</button>
+            <button id="btn-history" class="btn btn-secondary w-full">My History</button>
+            <button id="btn-logout" class="btn btn-secondary w-full text-red-400 border-red-400 border-opacity-20 hover:text-red-300 hover:border-red-400">Logout</button>
+          </div>
+        </aside>
+
+        <!-- Main Panel -->
+        <div id="dashboard-content">
+          <!-- Overview -->
+          <div id="panel-overview" class="glass-card p-6">
+            <h3 class="font-display font-semibold text-xl mb-6">Dashboard</h3>
+            <div class="grid sm:grid-cols-3 gap-4 mb-8">
+               <div class="p-5 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[var(--card-border)] text-center">
+                 <div class="text-3xl font-bold text-[var(--accent)]" id="stat-quizzes">0</div>
+                 <div class="text-xs text-[var(--fg-muted)] mt-1">Quizzes Taken</div>
+               </div>
+               <div class="p-5 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[var(--card-border)] text-center">
+                 <div class="text-3xl font-bold text-[var(--accent)]" id="stat-avg">0%</div>
+                 <div class="text-xs text-[var(--fg-muted)] mt-1">Avg Score</div>
+               </div>
+               <div class="p-5 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[var(--card-border)] text-center">
+                 <div class="text-3xl font-bold text-[var(--accent)]" id="stat-best">0%</div>
+                 <div class="text-xs text-[var(--fg-muted)] mt-1">Best Score</div>
+               </div>
+            </div>
+            <p class="text-[var(--fg-muted)]">Select a faculty and level from the sidebar to begin a new quiz session.</p>
+          </div>
+
+          <!-- History -->
+          <div id="panel-history" class="glass-card p-6 hidden">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="font-display font-semibold text-xl">History</h3>
+              <button id="btn-back-overview" class="btn btn-secondary text-sm py-2 px-3">Back</button>
+            </div>
+            <div id="history-list" class="space-y-3"></div>
+          </div>
+
+          <!-- View All -->
+          <div id="panel-view" class="glass-card p-6 hidden">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="font-display font-semibold text-xl">All Questions</h3>
+              <button id="btn-back-main" class="btn btn-secondary text-sm py-2 px-3">Back</button>
+            </div>
+            <div id="questions-list" class="space-y-4"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 3: QUIZ -->
+    <section id="step-quiz" class="hidden">
+      <div class="max-w-3xl mx-auto">
+        <div class="glass-card p-6 sm:p-8">
+          <!-- Header -->
+          <div class="mb-6">
+            <div class="flex justify-between items-center mb-2 text-sm font-medium">
+              <span id="quiz-progress-text" class="text-[var(--fg-muted)]">Question 1 of 10</span>
+              <span id="quiz-score-text" class="text-[var(--accent)]">Score: 0</span>
+            </div>
+            <div class="progress-track"><div id="quiz-progress-bar" class="progress-fill" style="width:10%"></div></div>
+          </div>
+
+          <!-- Question Area -->
+          <div id="quiz-area"></div>
+
+          <!-- Nav -->
+          <div class="flex justify-between items-center mt-8 pt-6 border-t border-[var(--card-border)]">
+            <button id="btn-prev" class="btn btn-secondary" disabled>Previous</button>
+            <button id="btn-finish" class="btn btn-danger">Finish Quiz</button>
+            <button id="btn-next" class="btn btn-primary" disabled>Next</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 4: RESULTS -->
+    <section id="step-results" class="hidden">
+      <div class="max-w-xl mx-auto text-center">
+        <div class="glass-card p-8 sm:p-10">
+          <div id="result-icon" class="w-20 h-20 mx-auto rounded-full bg-green-500 bg-opacity-10 flex items-center justify-center mb-6">
+            <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+          </div>
+          <h2 class="heading-xl mb-2">Quiz Complete</h2>
+          <p class="text-[var(--fg-muted)] mb-8">Here's how you performed</p>
+          
+          <div class="grid grid-cols-3 gap-4 mb-8">
+            <div class="p-4 rounded-xl bg-[rgba(255,255,255,0.02)]">
+              <div class="text-2xl font-bold text-green-500" id="res-correct">0</div>
+              <div class="text-xs text-[var(--fg-muted)]">Correct</div>
+            </div>
+            <div class="p-4 rounded-xl bg-[rgba(255,255,255,0.02)]">
+              <div class="text-2xl font-bold text-red-500" id="res-wrong">0</div>
+              <div class="text-xs text-[var(--fg-muted)]">Wrong</div>
+            </div>
+            <div class="p-4 rounded-xl bg-[rgba(255,255,255,0.02)]">
+              <div class="text-2xl font-bold text-[var(--accent)]" id="res-percent">0%</div>
+              <div class="text-xs text-[var(--fg-muted)]">Score</div>
+            </div>
+          </div>
+
+          <div class="flex justify-center gap-3">
+            <button id="btn-dashboard-ret" class="btn btn-secondary">Dashboard</button>
+            <button id="btn-retry" class="btn btn-primary">Try Again</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- OTP MODAL -->
+  <div id="modal-back" class="modal-backdrop"></div>
+  <div id="modal-box" class="modal-content">
+    <div class="glass-card p-8 text-center">
+      <h3 class="font-display font-bold text-xl mb-2">Verification Required</h3>
+      <p class="text-[var(--fg-muted)] text-sm mb-6">Enter the code sent to <span id="modal-email-display" class="font-medium text-[var(--fg)]"></span></p>
+      
+      <input type="text" id="input-otp" class="input-field text-center text-2xl tracking-[0.5em] font-bold mb-4" maxlength="6" placeholder="------" />
+      
+      <div class="flex gap-2">
+        <button id="btn-modal-verify" class="btn btn-primary flex-1">Verify</button>
+        <button id="btn-modal-cancel" class="btn btn-secondary flex-1">Cancel</button>
+      </div>
+      <button id="btn-modal-resend" class="text-xs text-[var(--fg-muted)] mt-4 hover:text-[var(--accent)]">Resend Code</button>
+    </div>
+  </div>
+
+  <script>
+    // --- CONFIGURATION ---
+    const API_URL = "https://script.google.com/macros/s/AKfycbw_DyZfWEpg5Z6Ex0J3aCLrM6PBWlsZp7sdOPPSemuCFG-KjslgvdENF9uscqlM5uF7/exec";
+
+    // --- STATE ---
+    const state = {
+      mode: 'login', // login | register
+      email: '',
+      token: '',
+      role: 'User',
+      mcqs: [],
+      filtered: [],
+      index: 0,
+      answers: {},
+      score: 0,
+      history: JSON.parse(localStorage.getItem('mcq_history') || '{}')
+    };
+
+    // --- UTILITIES ---
+    const $ = id => document.getElementById(id);
+    const showToast = (msg, type='info') => {
+      const c = $('toast-container');
+      const t = document.createElement('div');
+      t.className = `toast ${type}`;
+      t.innerHTML = `<span class="text-sm font-medium">${msg}</span>`;
+      c.appendChild(t);
+      setTimeout(() => { t.style.opacity=0; setTimeout(()=>t.remove(),300); }, 3500);
+    };
+
+    const api = async (params) => {
+      try {
+        const url = new URL(API_URL);
+        Object.keys(params).forEach(k => url.searchParams.append(k, params[k]));
+        const res = await fetch(url, { cache: 'no-store' });
+        return await res.json();
+      } catch (e) {
+        console.error(e);
+        return { success: false, message: "Network error" };
+      }
+    };
+
+    // --- THEME ---
+    const initTheme = () => {
+      if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
+    };
+    $('theme-toggle').onclick = () => {
+      document.body.classList.toggle('light-mode');
+      localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+    };
+
+    // --- NAVIGATION ---
+    const showStep = (id) => {
+      ['step-auth', 'step-dashboard', 'step-quiz', 'step-results'].forEach(s => {
+        $(s).classList.toggle('hidden', s !== id);
+      });
+      window.scrollTo(0,0);
+    };
+
+    const showPanel = (id) => {
+      ['panel-overview', 'panel-history', 'panel-view'].forEach(p => {
+        $(p).classList.toggle('hidden', p !== id);
+      });
+    };
+
+    // --- AUTH FLOW ---
+    $('btn-toggle-mode').onclick = () => {
+      state.mode = state.mode === 'login' ? 'register' : 'login';
+      $('btn-toggle-mode').textContent = state.mode === 'login' ? 'New user? Request Access' : 'Existing user? Login';
+      $('btn-auth-text').textContent = state.mode === 'login' ? 'Continue with Email' : 'Request Access';
+    };
+
+    $('btn-auth-action').onclick = async () => {
+      const email = $('auth-email').value.trim();
+      if (!email || !email.includes('@')) return showToast('Please enter a valid email', 'error');
+      
+      state.email = email;
+      $('btn-auth-action').disabled = true;
+      $('btn-spinner').classList.remove('hidden');
+      $('btn-auth-text').textContent = "Processing...";
+
+      if (state.mode === 'register') {
+        const res = await api({ type: 'registerUser', email, ip: 'web', location: 'browser' });
+        $('btn-auth-action').disabled = false;
+        $('btn-spinner').classList.add('hidden');
+        $('btn-auth-text').textContent = "Request Access";
+        
+        if (res.success) {
+          showToast('Request sent! Check your email for approval.', 'success');
+        } else {
+          showToast(res.message || 'Registration failed', 'error');
+        }
+      } else {
+        // Login flow -> Send Code
+        const res = await api({ type: 'sendCode', email, ip: 'web', location: 'browser' });
+        $('btn-auth-action').disabled = false;
+        $('btn-spinner').classList.add('hidden');
+        $('btn-auth-text').textContent = "Continue with Email";
+
+        if (res.success) {
+          openModal(email);
+        } else {
+          // If user not found, prompt to register
+          if (res.message.includes('not found') || res.message.includes('Not Registered')) {
+            showToast('Email not registered. Please request access.', 'error');
+            state.mode = 'register';
+            $('btn-toggle-mode').onclick(); // Update UI
+          } else {
+            showToast(res.message, 'error');
+          }
+        }
+      }
+    };
+
+    // --- MODAL ---
+    const openModal = (email) => {
+      $('modal-email-display').textContent = email;
+      $('modal-back').classList.add('active');
+      $('modal-box').classList.add('active');
+      $('input-otp').value = '';
+      setTimeout(() => $('input-otp').focus(), 100);
+    };
+    const closeModal = () => {
+      $('modal-back').classList.remove('active');
+      $('modal-box').classList.remove('active');
+    };
+    $('btn-modal-cancel').onclick = closeModal;
+    $('modal-back').onclick = closeModal;
+
+    $('btn-modal-verify').onclick = async () => {
+      const code = $('input-otp').value.trim();
+      if (!code) return showToast('Enter code', 'error');
+      
+      const res = await api({ type: 'verifyCode', email: state.email, code, ip: 'web', location: 'browser' });
+      
+      if (res.success) {
+        closeModal();
+        state.token = res.token;
+        state.role = res.role;
+        
+        $('user-badge').classList.remove('hidden');
+        $('user-badge').classList.add('flex');
+        $('user-email-display').textContent = state.email;
+        $('user-avatar').textContent = state.email.charAt(0).toUpperCase();
+        
+        showToast('Login Successful!', 'success');
+        initDashboard();
+      } else {
+        showToast(res.message || 'Invalid Code', 'error');
+        $('input-otp').classList.add('shake');
+        setTimeout(() => $('input-otp').classList.remove('shake'), 500);
+      }
+    };
+
+    $('btn-modal-resend').onclick = async () => {
+      const res = await api({ type: 'sendCode', email: state.email, ip: 'web', location: 'browser' });
+      showToast(res.success ? 'Code Resent!' : res.message, res.success ? 'success' : 'error');
+    };
+
+    // --- DASHBOARD ---
+    const initDashboard = async () => {
+      showStep('step-dashboard');
+      updateStats();
+      
+      // Load Filters
+      const res = await api({ type: 'getFilters' });
+      if (res.success) {
+        $('filter-faculty').innerHTML = '<option value="">All Faculties</option>' + res.subjects.map(s => `<option value="${s}">${s}</option>`).join('');
+        $('filter-level').innerHTML = '<option value="">All Levels</option>' + res.colleges.map(c => `<option value="${c}">${c}</option>`).join('');
+      }
+      
+      // Load All MCQs once
+      const mcqRes = await api({ type: 'getMCQs' });
+      if (mcqRes.success) state.mcqs = mcqRes.mcqs;
+      
+      toggleActionButtons();
+    };
+
+    const toggleActionButtons = () => {
+      // Allow start even without selection if mcqs exist, or enforce selection
+      const hasData = state.mcqs.length > 0;
+      $('btn-start-quiz').disabled = !hasData;
+      $('btn-view-all').disabled = !hasData;
+    };
+
+    $('filter-faculty').onchange = $('filter-level').onchange = () => {
+       // Optional: re-filter logic mostly happens client side on start
+    };
+
+    const updateStats = () => {
+      const h = state.history[state.email] || [];
+      $('stat-quizzes').textContent = h.length;
+      if (h.length > 0) {
+        const avg = Math.round(h.reduce((a,b) => a + b.percentage, 0) / h.length);
+        const best = Math.max(...h.map(x => x.percentage));
+        $('stat-avg').textContent = avg + '%';
+        $('stat-best').textContent = best + '%';
+      } else {
+        $('stat-avg').textContent = '0%';
+        $('stat-best').textContent = '0%';
+      }
+    };
+
+    // --- HISTORY ---
+    $('btn-history').onclick = () => {
+      renderHistory();
+      showPanel('panel-history');
+    };
+    $('btn-back-overview').onclick = () => showPanel('panel-overview');
+    
+    const renderHistory = () => {
+      const list = state.history[state.email] || [];
+      const container = $('history-list');
+      if(list.length === 0) {
+        container.innerHTML = '<p class="text-center text-[var(--fg-muted)] py-8">No history found.</p>';
+        return;
+      }
+      container.innerHTML = list.map(h => `
+        <div class="flex justify-between items-center p-4 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[var(--card-border)]">
+          <div>
+            <div class="font-medium">${h.subject}</div>
+            <div class="text-xs text-[var(--fg-muted)]">${h.date}</div>
+          </div>
+          <div class="text-right">
+            <div class="font-bold ${h.percentage >= 50 ? 'text-green-500' : 'text-red-500'}">${h.score}/${h.total}</div>
+            <div class="text-xs">${h.percentage}%</div>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    // --- QUIZ ---
+    $('btn-start-quiz').onclick = () => {
+      const f = $('filter-faculty').value;
+      const l = $('filter-level').value;
+      
+      let qs = state.mcqs;
+      if (f) qs = qs.filter(q => q.subject === f);
+      if (l) qs = qs.filter(q => q.college === l);
+      
+      // Shuffle and pick 10
+      qs = qs.sort(() => Math.random() - 0.5).slice(0, 10);
+      
+      if (qs.length === 0) return showToast('No questions found for selection.', 'error');
+      
+      state.filtered = qs;
+      state.index = 0;
+      state.answers = {};
+      state.score = 0;
+      
+      showStep('step-quiz');
+      renderQuestion();
+    };
+
+    const renderQuestion = () => {
+      const q = state.filtered[state.index];
+      const ans = state.answers[state.index];
+      const isDone = ans !== undefined;
+      
+      let html = `
+        <h4 class="text-xl font-semibold mb-6"><span class="text-[var(--accent)]">Q${state.index+1}.</span> ${q.q}</h4>
+        <div class="space-y-3">
+      `;
+      
+      ['A','B','C','D'].forEach((l, i) => {
+        const opt = q.options[i];
+        const isSelected = ans === l;
+        const isCorrect = q.answer === l;
+        
+        let cls = 'option-card';
+        if (isDone) {
+          cls += ' disabled';
+          if (isCorrect) cls += ' correct';
+          if (isSelected && !isCorrect) cls += ' wrong';
+        }
+        
+        html += `
+          <div class="${cls}" data-val="${l}">
+            <div class="option-marker">${l}</div>
+            <div class="flex-1">${opt}</div>
+            ${isDone && isCorrect ? '<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>' : ''}
+            ${isDone && isSelected && !isCorrect ? '<svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>' : ''}
+          </div>
+        `;
+      });
+      
+      html += '</div>';
+      
+      if (isDone) {
+        const isCorrect = ans === q.answer;
+        const msg = isCorrect ? (q.correctText || "Correct!") : (q.feedback && q.feedback[ans] || "Incorrect.");
+        html += `
+          <div class="mt-6 p-4 rounded-xl border-l-4 ${isCorrect ? 'border-green-500 bg-green-500 bg-opacity-5' : 'border-red-500 bg-red-500 bg-opacity-5'}">
+            <p class="text-sm">${msg}</p>
+            ${q.explanation ? `<p class="text-xs text-[var(--fg-muted)] mt-2">${q.explanation}</p>` : ''}
+          </div>
+        `;
+      }
+      
+      $('quiz-area').innerHTML = html;
+      
+      // Click handlers
+      if (!isDone) {
+        document.querySelectorAll('#quiz-area .option-card').forEach(el => {
+          el.onclick = () => selectOption(el.dataset.val);
+        });
+      }
+      
+      // Progress
+      const total = state.filtered.length;
+      $('quiz-progress-text').textContent = `Question ${state.index+1} of ${total}`;
+      $('quiz-score-text').textContent = `Score: ${state.score}`;
+      $('quiz-progress-bar').style.width = `${((state.index+1)/total)*100}%`;
+      
+      // Buttons
+      $('btn-prev').disabled = state.index === 0;
+      $('btn-next').disabled = !isDone || state.index === total - 1;
+    };
+
+    const selectOption = (val) => {
+      const q = state.filtered[state.index];
+      state.answers[state.index] = val;
+      if (val === q.answer) state.score++;
+      renderQuestion();
+    };
+
+    $('btn-next').onclick = () => { state.index++; renderQuestion(); };
+    $('btn-prev').onclick = () => { state.index--; renderQuestion(); };
+
+    $('btn-finish').onclick = async () => {
+      const total = state.filtered.length;
+      const answered = Object.keys(state.answers).length;
+      if (answered < total && !confirm(`Only ${answered}/${total} answered. Finish?`)) return;
+      
+      const percentage = Math.round((state.score/total)*100);
+      
+      // Save to Backend
+      await api({
+        type: 'saveScore',
+        email: state.email,
+        subject: $('filter-faculty').value || 'General',
+        college: $('filter-level').value || 'Any',
+        score: state.score,
+        total: total,
+        percentage: percentage
+      });
+      
+      // Save to Local History
+      if (!state.history[state.email]) state.history[state.email] = [];
+      state.history[state.email].unshift({
+        date: new Date().toLocaleString(),
+        subject: $('filter-faculty').value || 'General',
+        score: state.score,
+        total: total,
+        percentage: percentage
+      });
+      localStorage.setItem('mcq_history', JSON.stringify(state.history));
+      
+      // Show Results
+      $('res-correct').textContent = state.score;
+      $('res-wrong').textContent = total - state.score;
+      $('res-percent').textContent = percentage + '%';
+      showStep('step-results');
+    };
+
+    // --- Results Navigation ---
+    $('btn-dashboard-ret').onclick = () => { updateStats(); showStep('step-dashboard'); showPanel('panel-overview'); };
+    $('btn-retry').onclick = () => $('btn-start-quiz').onclick();
+
+    // --- View All ---
+    $('btn-view-all').onclick = () => {
+      const f = $('filter-faculty').value;
+      const l = $('filter-level').value;
+      let qs = state.mcqs;
+      if (f) qs = qs.filter(q => q.subject === f);
+      if (l) qs = qs.filter(q => q.college === l);
+      
+      $('questions-list').innerHTML = qs.map((q, i) => `
+        <div class="p-4 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[var(--card-border)]">
+          <p class="font-semibold mb-2">${i+1}. ${q.q}</p>
+          <div class="grid grid-cols-2 gap-2 text-sm">
+            ${q.options.map((o, j) => `<div class="p-2 rounded ${['A','B','C','D'][j] === q.answer ? 'bg-green-500 bg-opacity-10 text-green-500' : ''}">${['A','B','C','D'][j]}. ${o}</div>`).join('')}
+          </div>
+        </div>
+      `).join('');
+      showPanel('panel-view');
+    };
+    $('btn-back-main').onclick = () => showPanel('panel-overview');
+
+    // --- Logout ---
+    $('btn-logout').onclick = () => {
+      state.email = '';
+      state.token = '';
+      $('user-badge').classList.add('hidden');
+      $('auth-email').value = '';
+      showStep('step-auth');
+      showToast('Logged out', 'info');
+    };
+
+    // --- INIT ---
+    initTheme();
+  </script>
+</body>
+</html>
