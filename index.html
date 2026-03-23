@@ -226,7 +226,7 @@
              <p class="text-[var(--fg-muted)] mt-6 text-sm">Select a faculty from the sidebar to start a new quiz session.</p>
           </div>
 
-          <!-- Panel: Settings (NEW) -->
+          <!-- Panel: Settings (COMPLETE) -->
           <div id="panel-settings" class="glass-card p-6 hidden">
             <h3 class="font-display font-semibold text-xl mb-6">Profile Settings</h3>
             
@@ -240,7 +240,7 @@
                      </label>
                      <input type="file" id="avatar-upload" accept="image/*" class="hidden" />
                   </div>
-                  <p class="text-xs text-[var(--fg-muted)]">Click to change photo</p>
+                  <p class="text-xs text-[var(--fg-muted)]">Click icon to change photo</p>
                </div>
 
                <!-- Form Section -->
@@ -261,16 +261,19 @@
                      <input type="email" id="settings-email" class="input-field" disabled />
                   </div>
 
+                  <div>
+                     <label class="block text-xs font-bold uppercase text-[var(--fg-muted)] mb-2">College/Organization</label>
+                     <input type="text" id="settings-college" class="input-field" placeholder="Your College" />
+                  </div>
+
                   <div class="pt-4 border-t border-[var(--card-border)]">
-                     <h4 class="font-semibold text-sm mb-4">Change Password</h4>
+                     <h4 class="font-semibold text-sm mb-4">Update Password (Optional)</h4>
                      <div class="grid sm:grid-cols-2 gap-4">
-                        <input type="password" id="pass-old" class="input-field" placeholder="Old Password" />
-                        <input type="password" id="pass-new" class="input-field" placeholder="New Password" />
+                        <input type="password" id="pass-new" class="input-field" placeholder="Set New Password" />
                      </div>
                   </div>
 
                   <div class="flex justify-end gap-3 pt-2">
-                     <button id="btn-change-pass" class="btn btn-secondary text-sm">Update Password</button>
                      <button id="btn-save-profile" class="btn btn-primary">Save Changes</button>
                   </div>
                </div>
@@ -303,7 +306,7 @@
       </div>
     </section>
 
-    <!-- STEP 3: QUIZ (Simplified for brevity, logic same as before) -->
+    <!-- STEP 3: QUIZ -->
     <section id="step-quiz" class="hidden">
        <div class="max-w-3xl mx-auto glass-card p-6">
           <div class="mb-4"><div class="progress-track"><div id="q-progress" class="progress-fill" style="width:0%"></div></div></div>
@@ -465,6 +468,7 @@
        $('settings-name').value = p.fullName || '';
        $('settings-phone').value = p.phone || '';
        $('settings-email').value = p.email;
+       $('settings-college').value = p.college || '';
        $('referral-code-display').innerText = p.referralCode || 'N/A';
     };
 
@@ -505,34 +509,29 @@
     $('btn-save-profile').onclick = async () => {
        const name = $('settings-name').value;
        const phone = $('settings-phone').value;
+       const college = $('settings-college').value;
+       const newPass = $('pass-new').value;
        
        const res = await api({ 
           type: 'updateProfile', 
           email: state.email, 
           token: state.token, 
           fullName: name, 
-          phone: phone 
+          phone: phone,
+          college: college,
+          newPassword: newPass
        });
        
        if(res.success) {
           state.profile.fullName = name;
           state.profile.phone = phone;
+          state.profile.college = college;
           updateUI();
+          $('pass-new').value = '';
           toast("Profile saved!", "success");
        } else {
           toast(res.message, "error");
        }
-    };
-
-    // Change Password
-    $('btn-change-pass').onclick = async () => {
-       const oldP = $('pass-old').value;
-       const newP = $('pass-new').value;
-       if(!oldP || !newP) return toast("Fill both fields", "error");
-       
-       const res = await api({ type: 'changePassword', email: state.email, token: state.token, oldPass: oldP, newPass: newP });
-       toast(res.message, res.success ? "success" : "error");
-       if(res.success) { $('pass-old').value = ''; $('pass-new').value = ''; }
     };
 
     const copyReferral = () => {
@@ -541,7 +540,7 @@
        toast("Code copied!", "success");
     };
 
-    // --- Quiz Logic (Simplified) ---
+    // --- Quiz Logic ---
     $('btn-start-quiz').onclick = () => {
        let list = state.mcqs;
        const f = $('filter-faculty').value;
