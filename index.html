@@ -239,6 +239,8 @@
                  New user? Register
                </button>
             </div>
+            
+            <button id="btn-demo" class="btn btn-secondary w-full">Try Demo Mode</button>
           </div>
         </div>
       </div>
@@ -423,9 +425,36 @@
        method: 'otp', // otp | password
        email: '',
        token: '',
+       demo: false,
        profile: {},
        mcqs: [],
        quiz: { index: 0, data: [], answers: {}, score: 0 }
+    };
+
+    // Bundled sample data so the app is fully usable without the backend.
+    const DEMO = {
+      profile: {
+        email: 'demo@cprec.test',
+        fullName: 'Demo Student',
+        phone: '+977 9800000000',
+        college: 'CPREC Nepal (Demo)',
+        avatar: '',
+        referralCode: 'DEMO123'
+      },
+      mcqs: [
+        { q: 'Which organ is primarily responsible for drug metabolism?', options: ['Liver','Kidney','Heart','Lungs'], answer: 'A', subject: 'Pharmacy', level: 'Level 1' },
+        { q: 'In a prescription, what does "BID" mean?', options: ['Twice a day','Once a day','As needed','At bedtime'], answer: 'A', subject: 'Pharmacy', level: 'Level 1' },
+        { q: 'Which drug class is most commonly used to lower LDL cholesterol?', options: ['Statins','Beta-blockers','Diuretics','NSAIDs'], answer: 'A', subject: 'Pharmacy', level: 'Level 2' },
+        { q: "A drug's therapeutic index refers to the:", options: ['Ratio of toxic to effective dose','Half-life','Bioavailability','Clearance'], answer: 'A', subject: 'Pharmacy', level: 'Level 2' },
+        { q: 'Which enzyme metabolizes warfarin and is affected by many interactions?', options: ['CYP2C9','CYP3A4','CYP1A2','CYP2D6'], answer: 'A', subject: 'Pharmacy', level: 'Level 3' },
+        { q: 'A normal adult resting heart rate is roughly:', options: ['60–100 bpm','40–60 bpm','100–120 bpm','120–140 bpm'], answer: 'A', subject: 'Nursing', level: 'Level 1' },
+        { q: 'Which vital sign most directly suggests infection?', options: ['Temperature','Weight','Height','Vision'], answer: 'A', subject: 'Nursing', level: 'Level 1' },
+        { q: 'The "5 rights" of medication administration do NOT include:', options: ['Right price','Right patient','Right dose','Right route'], answer: 'A', subject: 'Nursing', level: 'Level 2' },
+        { q: 'Hand hygiene is most effective at preventing:', options: ['Transmission of pathogens','Cancer','Diabetes','Asthma'], answer: 'A', subject: 'Public Health', level: 'Level 1' },
+        { q: 'Which vaccine is routinely given at birth in Nepal?', options: ['BCG','MMR','HPV','Influenza'], answer: 'A', subject: 'Public Health', level: 'Level 2' },
+        { q: 'A BMI of 28 is classified as:', options: ['Overweight','Underweight','Normal','Obese'], answer: 'A', subject: 'Public Health', level: 'Level 2' },
+        { q: 'Which blood cells are primarily responsible for immunity?', options: ['White blood cells','Red blood cells','Platelets','Plasma'], answer: 'A', subject: 'Biology', level: 'Level 1' }
+      ]
     };
 
     // --- Utils ---
@@ -553,30 +582,68 @@
        }
     };
 
+    // Demo Mode (no backend required)
+    $('btn-demo').onclick = () => {
+       state.demo = true;
+       state.email = DEMO.profile.email;
+       state.token = 'demo';
+       initDashboard();
+       toast("Welcome to demo mode!", "success");
+    };
+
     // --- Dashboard ---
     const initDashboard = async () => {
        showStep('step-dashboard');
        $('user-badge').classList.remove('hidden');
        $('user-badge').classList.add('flex');
+
+       // Demo mode: skip the backend entirely and use bundled sample data
+       if(state.demo) {
+          state.profile = DEMO.profile;
+          state.mcqs = DEMO.mcqs;
+          updateUI();
+          populateFilters();
+          $('btn-start-quiz').disabled = false;
+          toast("Demo mode — sample questions loaded", "info");
+          return;
+       }
        
        // Load Profile
        const pRes = await api({ type: 'getProfile', email: state.email, token: state.token });
        if(pRes.success) {
           state.profile = pRes.profile;
           updateUI();
+       } else {
+          state.profile = { email: state.email, fullName: state.email.split('@')[0] };
+          updateUI();
        }
        
-       // Load MCQs
+       // Load MCQs (fall back to the sample set if the API is unreachable)
        const mRes = await api({ type: 'getMCQs' });
-       if(mRes.success) state.mcqs = mRes.mcqs;
+       if(mRes.success && Array.isArray(mRes.mcqs) && mRes.mcqs.length) {
+          state.mcqs = mRes.mcqs;
+       } else {
+          state.mcqs = DEMO.mcqs;
+          toast("Couldn't load questions — using sample set", "error");
+       }
        
        // Filters
        const fRes = await api({ type: 'getFilters' });
        if(fRes.success) {
           $('filter-faculty').innerHTML = '<option value="">All</option>' + fRes.subjects.map(s => `<option value="${s}">${s}</option>`).join('');
           $('filter-level').innerHTML = '<option value="">All</option>' + fRes.colleges.map(c => `<option value="${c}">${c}</option>`).join('');
+       } else {
+          populateFilters();
        }
        $('btn-start-quiz').disabled = false;
+    };
+
+    // Derive faculty/level filters directly from the loaded questions
+    const populateFilters = () => {
+       const faculties = [...new Set(state.mcqs.map(q => q.subject).filter(Boolean))].sort();
+       const levels = [...new Set(state.mcqs.map(q => q.level).filter(Boolean))].sort();
+       $('filter-faculty').innerHTML = '<option value="">All</option>' + faculties.map(s => `<option value="${s}">${s}</option>`).join('');
+       $('filter-level').innerHTML = '<option value="">All</option>' + levels.map(l => `<option value="${l}">${l}</option>`).join('');
     };
 
     const updateUI = () => {
@@ -665,11 +732,25 @@
     };
 
     // --- Quiz Logic ---
+    // Fisher-Yates shuffle (unbiased, unlike sort(() => Math.random() - 0.5))
+    const shuffle = (arr) => {
+       const a = arr.slice();
+       for(let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+       }
+       return a;
+    };
+
     $('btn-start-quiz').onclick = () => {
        let list = state.mcqs;
        const f = $('filter-faculty').value;
+       const l = $('filter-level').value;
        if(f) list = list.filter(q => q.subject === f);
-       list = list.sort(() => Math.random() - 0.5).slice(0, 10);
+       // Only apply the level filter when questions actually carry a `level`
+       // (the live backend may not), so we never break the real flow.
+       if(l && state.mcqs.some(q => q.level)) list = list.filter(q => q.level === l);
+       list = shuffle(list).slice(0, 10);
        
        if(!list.length) return toast("No questions found", "error");
        
@@ -716,10 +797,14 @@
     $('btn-q-prev').onclick = () => { state.quiz.index--; renderQ(); };
     
     $('btn-q-finish').onclick = async () => {
-       const score = state.quiz.score;
        const total = state.quiz.data.length;
+       const answered = Object.keys(state.quiz.answers).length;
+       if(answered < total && !confirm(`You've answered ${answered} of ${total} questions. Finish anyway?`)) return;
+       const score = state.quiz.score;
        const percent = Math.round((score/total)*100);
-       await api({ type: 'saveScore', email: state.email, subject: $('filter-faculty').value || 'General', college: 'Web', score, total, percentage: percent });
+       if(!state.demo) {
+          await api({ type: 'saveScore', email: state.email, subject: $('filter-faculty').value || 'General', college: 'Web', score, total, percentage: percent });
+       }
        $('res-score').innerText = `${score}/${total} (${percent}%)`;
        showStep('step-results');
     };
