@@ -1,0 +1,1602 @@
+[
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 1,
+    "question": "Oral contraceptive failure in rifampicin is due to their",
+    "options": [
+      "Decreased excretion",
+      "Increased metabolism",
+      "Increased adsorption",
+      "Inhibition of cyst formation"
+    ],
+    "answer": "B",
+    "explanation": "Rifampicin is an enzyme inducer (CYP3A4) leading to increase in metabolism of oral contraceptives resulting in failure of contraceptives. Other enzyme inducers like Phenytoin is also contraindicated in this case.",
+    "correctText": "Increased metabolism",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 2,
+    "question": "Which one is source of Anthraquinone?",
+    "options": [
+      "Rhubarb",
+      "Senna",
+      "Valerian",
+      "Capsicum"
+    ],
+    "answer": "B",
+    "explanation": "Anthraquinone is extracted from both Rhubarb and Senna which is used as laxatives. Other major source is Aloe. Suitable answer should be Senna as it is water-soluble than rhubarb. Mnemonic: SAR",
+    "correctText": "Senna",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 3,
+    "question": "Botanical name of Timur is-",
+    "options": [
+      "Tinospora cordifolia",
+      "Zanthoxylum armatum",
+      "Emblica officinails",
+      "Asparagus racemus"
+    ],
+    "answer": "B",
+    "explanation": "Tinospora codifolia (Gurjo), Emblica officinails(Amala), Asparagus racemus (Kurilo)",
+    "correctText": "Zanthoxylum armatum",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 4,
+    "question": "Senna belongs to the family of………………….",
+    "options": [
+      "Leguminosae",
+      "Sennaceae",
+      "Liliceae",
+      "Polygonaceae"
+    ],
+    "answer": "A",
+    "explanation": "",
+    "correctText": "Leguminosae",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 5,
+    "question": "‘Sweet Flag’ is synonym of-",
+    "options": [
+      "Valeriana wallichi",
+      "Cassia fistula",
+      "Asparagus Officinails",
+      "Acorus calamus"
+    ],
+    "answer": "D",
+    "explanation": "Used for gastro disorders",
+    "correctText": "Acorus calamus",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 6,
+    "question": "The common name ‘padamchal’ is for-",
+    "options": [
+      "Valeriana jatamasnsi",
+      "Cinnamomumtamala",
+      "Mohania nepalensis",
+      "Rheum palmatum"
+    ],
+    "answer": "D",
+    "explanation": "Dried root and rhizomes for laxative and bitter stomachic",
+    "correctText": "Rheum palmatum",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 7,
+    "question": "Chemical test used for identification of carbohydrates:",
+    "options": [
+      "Ninhydrin",
+      "Molisch",
+      "Borntrager",
+      "Baljet"
+    ],
+    "answer": "B",
+    "explanation": "Mnemonic: COMB – Carbohydrates is detected by mostly by Molisch and Benedicts",
+    "correctText": "Molisch",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 8,
+    "question": "Important chemical constituent of honey is-",
+    "options": [
+      "Glucose",
+      "Fructose",
+      "Maltose",
+      "Invert sugar"
+    ],
+    "answer": "B",
+    "explanation": "Composition of honey : 38.2% Fructose, 31% Glucose, 17.1% Water, 7.2% Maltose, and others as per USFDA",
+    "correctText": "Fructose",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 9,
+    "question": "The crude drug is boiled in a specified volume of water for a defined time; it is then cooled and strained or filtered, the procedure is:",
+    "options": [
+      "Decoction",
+      "Percolation",
+      "Maceration",
+      "Infusion"
+    ],
+    "answer": "A",
+    "explanation": "Decoction(DB): Boiling drugs with water then filter. Percolation(PD): Liquid is passed slowly drop by drop to drug substance Maceration(MS): Drug substance is soaked for longer period of time. Marc is pressed Infusion(IP): Pouring warm water over drugs into keep contact for few minutes then filter.",
+    "correctText": "Decoction",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 10,
+    "question": "Thermo labile materials are sterilized by-",
+    "options": [
+      "Dry heat sterilization",
+      "Membrane filtration",
+      "Moist heat sterilization",
+      "Radiation"
+    ],
+    "answer": "B",
+    "explanation": "",
+    "correctText": "Membrane filtration",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 11,
+    "question": "Dry heat sterilization destroys microorganisms by-",
+    "options": [
+      "Protein denaturation",
+      "Drying of cells",
+      "Call wall destruction",
+      "Spores destruction"
+    ],
+    "answer": "A",
+    "explanation": "Normally 160°C temperature is used. Microorganisms are destroyed by denaturation of protein (enzymes) and nucleic acid by oxidation.",
+    "correctText": "Protein denaturation",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 12,
+    "question": "Which of the following plant constituents can be characterized by reversible complexion with proteins?",
+    "options": [
+      "Alkaloids",
+      "Saponins",
+      "Tannins",
+      "Mucilage"
+    ],
+    "answer": "C",
+    "explanation": "",
+    "correctText": "Tannins",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 13,
+    "question": "All the following are indications for propranolol except",
+    "options": [
+      "Hypertension",
+      "Bronchial asthma",
+      "Angina pectoris",
+      "Hyperthyroidism"
+    ],
+    "answer": "B",
+    "explanation": "Propranolol is causes bronchoconstriction and hence severe asthmatic attack may precipitate hence contraindicated. Propranolol in high doses also slowly decreases serum triiodothyronine (T3) concentrations.",
+    "correctText": "Bronchial asthma",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 14,
+    "question": "Which of the following is ultra-short acting BETA blocker?",
+    "options": [
+      "Propranolol",
+      "Atenolol",
+      "Esmolol",
+      "Nadolol"
+    ],
+    "answer": "C",
+    "explanation": "Esmolol is an ultra-short-acting beta-adrenergic blockers parenteral agents resulting in a short duration of action (10 to 20 minutes)",
+    "correctText": "Esmolol",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 15,
+    "question": "Which of the following diuretics is contraindicated in patients with hyperkalemia?",
+    "options": [
+      "Acetazolamide",
+      "Hydrochlorothiazide",
+      "Chlorthalidone",
+      "Spironolactone"
+    ],
+    "answer": "D",
+    "explanation": "Spironolactone is contraindicated in patients with hyperkalemia because it increases the concentration of potassium in the body by competitively blocking the mineralocorticoid receptor which promotes sodium excretion but potassium retention in distal and collecting duct of renal tubules.",
+    "correctText": "Spironolactone",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 16,
+    "question": "Which of the following statement about Metoclopramide is correct?",
+    "options": [
+      "It is a dopamine agonist",
+      "It is not associated with extra pyramidalsymptom’s.",
+      "It may be used for prophylaxis of travel sickness.",
+      "Adult daily dose is 30mg."
+    ],
+    "answer": "A",
+    "explanation": "Metoclopramide is a dopamine agonist as it blocks D-2 receptors in CTZ and vomiting center. It is not associated with extra pyramidal symptom.",
+    "correctText": "It is a dopamine agonist",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 17,
+    "question": "Cyproheptadine can best be classified pharmacologically as an:",
+    "options": [
+      "Antihypertensive agent",
+      "Anti-inflammatory agent",
+      "Antipsychotic agent",
+      "Antihistaminic agent"
+    ],
+    "answer": "D",
+    "explanation": "Cyproheptadine is a first generation anti-histamine At higher concentrations, it also has anticholinergic, antiserotonergic, and antidopaminergic activities.",
+    "correctText": "Antihistaminic agent",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 18,
+    "question": "All the following drug affect the rennin-angiotensin system EXCEPT-",
+    "options": [
+      "Spironolactone",
+      "Valsartan",
+      "Losartan",
+      "Lisinopril •"
+    ],
+    "answer": "A",
+    "explanation": "Valsartan and Losartan belongs to angiotensin II receptor blocker that binds to AT1 and prevent binding of angiotensin II and lowers blood pressure while Lisinopril is an angiotensin converting enzyme (ACE) inhibitor which inhibits conversion of angiotensin I to angiotensin II. Spironolactone is potassium sparing diuretic and not related to rennin-angiotensin system.",
+    "correctText": "Spironolactone",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 19,
+    "question": "Which of the following antibacterial agent is not present for systemic use?",
+    "options": [
+      "Sodium fusidate",
+      "Gentamicin",
+      "Vancomycin",
+      "Mupirocin"
+    ],
+    "answer": "D",
+    "explanation": "Systemic effect relates to administration of medication that reaches to circulatory system via GI tract or parenteral route. Sodium fusidate is available in both tablet and suspension. Vancomycin is available in oral and parenteral preparations and Gentamicin in parenteral while Mupirocin is available only in topical preparations.",
+    "correctText": "Mupirocin",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 20,
+    "question": "Compared with soluble insulin, insulin as part:",
+    "options": [
+      "Has a faster onset of action",
+      "Results in a higher fasting blood-glucose concentration.",
+      "Is associated with a lower frequency of hypoglycemia",
+      "Results in higher serum insulin level. •"
+    ],
+    "answer": "A",
+    "explanation": "Insulin aspart, insulin glulisine, and insulin lispro have a faster onset of action (within 15 minutes) classified as rapid acting insulin but soluble insulin are classified as short acting ( within 30 minutes)and not rapid acting.",
+    "correctText": "Has a faster onset of action",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 21,
+    "question": "In cough, which of the following constituents is used to reduce sputum viscosity?",
+    "options": [
+      "Promethazine",
+      "Pholcodine",
+      "Dextromethorphan",
+      "Carbocisteine"
+    ],
+    "answer": "D",
+    "explanation": "Promethazine is an antihistaminic agent, Dextromethorphan and Pholcodine is a cough suppressant while Carbosisteine is a mucolytic agent that helps in reducing the viscosity of sputum.",
+    "correctText": "Carbocisteine",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 22,
+    "question": "Which histamine H2 blocker has maximum inhibitory effect on microsomal cytochrome P-450 enzyme?",
+    "options": [
+      "Cimetidine",
+      "Ranitidine",
+      "Roxatidine",
+      "Famotidine"
+    ],
+    "answer": "A",
+    "explanation": "Cimetidine has high affinity towards cytochrome P-450 enzymes and inhibits stomach acid production.",
+    "correctText": "Cimetidine",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 23,
+    "question": "Aspirin prolongs bleeding time by inhibiting the synthesis of……………",
+    "options": [
+      "Clotting factors in liver",
+      "Cyclic AMP in platelets",
+      "Prostacyclin in vascular endothelium",
+      "Thromboxane A2 in platelets"
+    ],
+    "answer": "D",
+    "explanation": "Asprin blocks COX-1 and COX-2 thus inhibiting synthesis of thromboxane A2 and prolongs bleeding time",
+    "correctText": "Thromboxane A2 in platelets",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 24,
+    "question": "Which of the following drugs is an anti-progestin?",
+    "options": [
+      "Gemeprost",
+      "Megestrol",
+      "Mifepristone",
+      "Tamoxifen"
+    ],
+    "answer": "C",
+    "explanation": "Mifepristone blocks effects of progesterone. It is also used to treat hyperglycemia with Cushing syndrome (increased cortisol levels in body).",
+    "correctText": "Mifepristone",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 25,
+    "question": "Following gold compound is generally administered orally",
+    "options": [
+      "Aurothioglucose",
+      "Auronafin",
+      "Gold sodiumthiomalate",
+      "all of the above"
+    ],
+    "answer": "B",
+    "explanation": "Gold containing drugs are administered IM or orally to treat rheumatoid arthritis, this therapy is also referred as Chrysotherapy and Aurotherapy. Aurofin is orally active gold compound which has now been replaced by more effective medications like methotrexate. Both Gold sodiumthiomalate and Aurothioglucose is used given intramuscularly.",
+    "correctText": "Auronafin",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 26,
+    "question": "Among the following disease modifying drugs used in rheumatoid arthritis, fastest symptom relief is obtained with",
+    "options": [
+      "Auronafin",
+      "Penicillamine",
+      "Sulfasalazine",
+      "Methotrexate"
+    ],
+    "answer": "D",
+    "explanation": "In lower dose Methotreaxate (disease modifying drugs/ immunosuppressants) is the first choice of drug in Rhematoid arthritis i.e. Dose: 7.5 mg once weekly. It is also used as an anti-neoplastic agent 30 mg daily.",
+    "correctText": "Methotrexate",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 27,
+    "question": "The most important dose-limiting adverse effect of colchicine is:",
+    "options": [
+      "Sedation",
+      "Kidney damage",
+      "Diarrhea",
+      "Muscle paralysis"
+    ],
+    "answer": "C",
+    "explanation": "Colchicine is a second line anti-gout agent used both acute and prophylactically. Side effect is dose related which includes diarrhea, abdominal pain, cramps, nausea and vomiting. In higher dose it can cause kidney damage and muscular paralysis but not in normal dose.",
+    "correctText": "Diarrhea",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 28,
+    "question": "The corticosteroid with a longer duration of action is:",
+    "options": [
+      "Cortisone",
+      "Prednisone",
+      "Betamethasone",
+      "Fludrocortisone"
+    ],
+    "answer": "C",
+    "explanation": "Cortisone is a short acting glucocorticoids with biological half-life less than 12 hours, prednisolone is an intermediate acting glucocorticoids with biological half-life between 12-36 hours, betamethasone is long acting glucocorticoids with biological half-life greater than 36 hours and fludrocortisone is mineralocorticoid. Glucocorticoids help regulate the body’s response to stress, while mineralocorticoids help regulate water and salt balance.",
+    "correctText": "Betamethasone",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 29,
+    "question": "Which of the following is not a broad spectrum antibiotic?",
+    "options": [
+      "Ampicillin",
+      "Tetracycline",
+      "Chloramphenicol",
+      "Clindamycin"
+    ],
+    "answer": "D",
+    "explanation": "",
+    "correctText": "Clindamycin",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 30,
+    "question": "Ingestion of which of the following vitamins should be avoided when taking oral anticoagulant?",
+    "options": [
+      "Vitamin A",
+      "Vitamin D",
+      "Vitamin E",
+      "Vitamin K"
+    ],
+    "answer": "D",
+    "explanation": "Vitamin K is responsible for activation of clotting factors II, VII, IX and X in liver thus avoided with oral anticoagulants.",
+    "correctText": "Vitamin K",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 31,
+    "question": "The recommended temperature set for the disintegration apparatus for any dispersible tablet as per IP would be:",
+    "options": [
+      "37 °C",
+      "37 °C+ 2 ° C",
+      "Room temperature",
+      "25° C + 1°C"
+    ],
+    "answer": "D",
+    "explanation": "The recommended temperature set for the disintegration apparatus for any dispersible tablet or soluble tablets as per IP is 25 °C± 1°C within 3 mins while for BP it is 15-25°C. The logic behind this is that dispersible tablets are normally dissolved in a glass of water in room temperature. Don’t confuse this with option C as room temperature may vary in different climate zone and the universal room temperature is considered to be 25°C.",
+    "correctText": "25° C + 1°C",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 32,
+    "question": "The term used when a small amount of material from a tablet is sticking to and being removed off from the tablet- surface by a punch face is:",
+    "options": [
+      "Sticking",
+      "Binding",
+      "Picking",
+      "Double Impression"
+    ],
+    "answer": "C",
+    "explanation": "Sticking refers to adhesion of tablet to the punch face or sticking of tablet material to die wall but tablet material is not detached or pitted surface of tablets won’t occur. Binding is when adheres in die which hinders in ejection of tablet. Picking is when small amount of material from a tablet sticks and is removed from tablet the surface. Double impression is seen in tablets with embossing where the monogram or breakline appears twice.",
+    "correctText": "Picking",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 33,
+    "question": "Select the best packaging for the hygroscopic, light sensitive & less margin pharmaceutical product:",
+    "options": [
+      "Blister Packaging",
+      "Strip Packaging",
+      "Alu-Alu Packaging",
+      "PVDC Aluminum Packaging"
+    ],
+    "answer": "B",
+    "explanation": "Blister packaging isn’t suitable for light sensitive drugs and has low moisture barrier compared to Alu-Alu. Strip packaging is cost effective and suitable for both hygroscopic and light sensitive drug substance. Alu-Alu packaging is best pharmaceutical packaging for light sensitive and hygroscopic drugs but is costly. PVDC Aluminum packaging is similar to blister where one side is aluminum and the other side is PVDC plastic.",
+    "correctText": "Strip Packaging",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 34,
+    "question": "In Biopharmaceutical Classification System (BCS), class II drug means the drug has",
+    "options": [
+      "High permeability: high solubility",
+      "High permeability: low solubility",
+      "low permeability: low solubility",
+      "low permeability: high solubility"
+    ],
+    "answer": "B",
+    "explanation": "Pneumonic: First class he had high studies and percentage. Second class low studies but still high percentage. Third class is tough so high studies still low percentage and sadly fourth class he got sick so low studies with low percentage. Class I: High solubility, High permeability Class II: Low solubility, High permeability Class III: High solubility, Low permeability Class IV: Low solubility, Low permeability",
+    "correctText": "High permeability: low solubility",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 35,
+    "question": "Semi solid must have …………….. Flow.",
+    "options": [
+      "Plastic",
+      "Pseudo plastic",
+      "Dilatant",
+      "Newtonian"
+    ],
+    "answer": "B",
+    "explanation": "Plastic flow: Flows on applied stress Pseudo plastic flow: Shear thinning, more stress more flow Dilatant: Shear thickening, viscosity increases as more shear stress is applied",
+    "correctText": "Pseudo plastic",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 36,
+    "question": "Which of the following categories of drugs are safe to use in pregnancy?",
+    "options": [
+      "Category A",
+      "Category B",
+      "Category",
+      "Category X"
+    ],
+    "answer": "A",
+    "explanation": "Category A: Safe and no risk Category B: No evidence of risk in humans Category C: Not much study done but can be used calculating risk benefit ratio Category D: Used calculating risk benefit ratio Category X: Higher risk so cannot be used",
+    "correctText": "Category A",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 37,
+    "question": "Which is not the aim of standard treatment guidelines?",
+    "options": [
+      "Uniformity in practice",
+      "Avoid mistake",
+      "No need of referral",
+      "Managing in low cost"
+    ],
+    "answer": "C",
+    "explanation": "Standard treatment guidelines aims on uniformity in practice, to avoid mistakes and low cost treatment management.",
+    "correctText": "No need of referral",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 38,
+    "question": "The most reliable indicator for child dose calculation is:",
+    "options": [
+      "A body surface area",
+      "Sex",
+      "Age",
+      "Weight"
+    ],
+    "answer": "A",
+    "explanation": "(Body surface area of child X adult dose)/1.73m2",
+    "correctText": "A body surface area",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 39,
+    "question": "The prescription’s “sig” refers to the",
+    "options": [
+      "Directions for the patient to follow",
+      "Prescriber’s signature",
+      "Patient’s signature",
+      "Medication prescribed"
+    ],
+    "answer": "A",
+    "explanation": "Sig refers to let it be labeled where doctor mentions time and frequency along with how to use particular medication. These information is patient focused.",
+    "correctText": "Directions for the patient to follow",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 40,
+    "question": "Auxiliary labels are attached to a container label to",
+    "options": [
+      "Provide the billing information",
+      "Supplement the information on the container",
+      "Increase marketability of the product",
+      "Give the pharmacist’s phone number"
+    ],
+    "answer": "B",
+    "explanation": "Auxiliary labels are attached by pharmacist intended to provide information regarding safe administration, use and storage.",
+    "correctText": "Supplement the information on the container",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 41,
+    "question": "One of the most important communication skills",
+    "options": [
+      "Inactive listening",
+      "Objective listening",
+      "Empathic Listening",
+      "Active listening"
+    ],
+    "answer": "D",
+    "explanation": "Actively listening means to listen and understand what they are saying while inactive listening means to listen but not pay attention to what they are saying. Empathic listening means to show empathy or feel towards what they say. Objective listening refers to listen and evaluate what a person is saying.",
+    "correctText": "Active listening",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 42,
+    "question": "Which of the following statement about pharmaceutical care is incorrect?",
+    "options": [
+      "It does not deal with the patient’s quality of life",
+      "It ensures that the patient’s use of medication is optimal.",
+      "It is applicable and achievable by pharmacist in all practice setting.",
+      "There is direct personal, professional and responsible relationship with patient."
+    ],
+    "answer": "A",
+    "explanation": "",
+    "correctText": "It does not deal with the patient’s quality of life",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 43,
+    "question": "Mistake at what step is not considered medication error?",
+    "options": [
+      "Prescribing",
+      "Distribution",
+      "Dispensing",
+      "Administering"
+    ],
+    "answer": "B",
+    "explanation": "",
+    "correctText": "Distribution",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 44,
+    "question": "Which is not the function of pharmacy and therapeutic committee?",
+    "options": [
+      "Develop hospital formally",
+      "Initiate drug use review programme",
+      "Procure medicine for the hospital",
+      "Advice pharmacy for drug distribution"
+    ],
+    "answer": "C",
+    "explanation": "Pharmacy and therapeutic committee is to update hospital formulary, making policies and procedures for selection, procurement, dispensing, labeling, availability, administration, and control of drugs throughout the hospital but doesn’t procure medicine for the hospital",
+    "correctText": "Procure medicine for the hospital",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 45,
+    "question": "Which of the following factors is associated with an increased risk of noncompliance in the elderly?",
+    "options": [
+      "Poly pharmacy",
+      "Expensive medications",
+      "Hypertension",
+      "Male gender"
+    ],
+    "answer": "A",
+    "explanation": "Poly pharmacy means a prescription containing several medications which might cause confusion to elderly patients leading to non-compliance.",
+    "correctText": "Poly pharmacy",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 46,
+    "question": "Which laxative should not be used to treat acute constipation?",
+    "options": [
+      "Glycerin",
+      "Bisacodyl suppository",
+      "Psyllium",
+      "Milk of magnesia"
+    ],
+    "answer": "C",
+    "explanation": "Stimulant laxatives like Bisacodyl suppository might cause dependency on regular use so isn’t used in acute constipation.",
+    "correctText": "Psyllium",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 47,
+    "question": "What are the most common sign/symptoms of hemorrhoids?",
+    "options": [
+      "Bleeding",
+      "Pain",
+      "Seepage",
+      "Pruritus"
+    ],
+    "answer": "A",
+    "explanation": "",
+    "correctText": "Bleeding",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 48,
+    "question": "Good Pharmacy Practice (GPP) guidelines promotes standards for the following except",
+    "options": [
+      "The promotion of health",
+      "Patient self-care",
+      "Supply of medicine and medical devices",
+      "Enforcing prescribing"
+    ],
+    "answer": "D",
+    "explanation": "Good pharmacy practice guideline promotes the standards for promotion of health, patient self- care, supply of medicine and medical devices but does not enforce prescribing however it deals about proper prescription handling.",
+    "correctText": "Enforcing prescribing",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 49,
+    "question": "In ABC analysis, Item A is:",
+    "options": [
+      "10% of medicines consuming 70% of resources",
+      "70% of medicines consuming 10% of resources",
+      "20% of medicines consuming 20% of resources",
+      "50% of medicines consuming 5% of resources"
+    ],
+    "answer": "A",
+    "explanation": "ABC analysis is inventory categorization method. “A\" approximately 10% of items and 66.6% of value \"B\" approximately 20% of items and 23.3% of value \"C\" approximately 70% of items and 10.1% of value",
+    "correctText": "10% of medicines consuming 70% of resources",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 50,
+    "question": "A PRN order for a medication that is used on an ……. basis.",
+    "options": [
+      "Regular",
+      "As needed",
+      "Everyday",
+      "Sufficient quantity"
+    ],
+    "answer": "B",
+    "explanation": "",
+    "correctText": "As needed",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 51,
+    "question": "Following are the role of modern community pharmacy except",
+    "options": [
+      "Care of patients or clinical pharmacy",
+      "Small scale manufacture of medicines",
+      "Responding to minor ailments",
+      "Health promotion"
+    ],
+    "answer": "B",
+    "explanation": "",
+    "correctText": "Small scale manufacture of medicines",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 52,
+    "question": "What part of cell does the Kerb’s cycle take place?",
+    "options": [
+      "Mitochondria",
+      "Nucleus",
+      "Endoplasmic reticulum",
+      "Golgi apparatus"
+    ],
+    "answer": "A",
+    "explanation": "Kerb’s cycle is also known as citric acid cycle which occurs inside the mitochondrial matrix of the eukaryotic cell and in the cytoplasm of prokaryotic cells",
+    "correctText": "Mitochondria",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 53,
+    "question": "A cervical collar that immobilizes the neck is called a",
+    "options": [
+      "Soft cervical collar",
+      "Foam cervical collar",
+      "Hard cervical collar",
+      "Philadelphia collar"
+    ],
+    "answer": "D",
+    "explanation": "",
+    "correctText": "Philadelphia collar",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 54,
+    "question": "EDTA is used as chelating agent in:",
+    "options": [
+      "Acid- Base titration",
+      "Potentiometric Titration",
+      "Complexometric Titration",
+      "Non- aqueous Titration"
+    ],
+    "answer": "C",
+    "explanation": "",
+    "correctText": "Complexometric Titration",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 55,
+    "question": "Milk of Magnesia is used as:",
+    "options": [
+      "Antacid only",
+      "Laxative only",
+      "Both A & B",
+      "Ulcer healing"
+    ],
+    "answer": "C",
+    "explanation": "",
+    "correctText": "Both A & B",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 56,
+    "question": "Following are the barriers that affect the patient’s compliance except",
+    "options": [
+      "Cost of medication",
+      "Lack of access",
+      "Distance from pharmacy",
+      "All of the above"
+    ],
+    "answer": "C",
+    "explanation": "Distance from pharmacy can rarely be the reason for non-compliance.",
+    "correctText": "Distance from pharmacy",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 57,
+    "question": "What is the maximum legally acceptable markup price of selling any pharmaceutical as well as cosmetics products?",
+    "options": [
+      "16%",
+      "20%",
+      "25%",
+      "30%"
+    ],
+    "answer": "B",
+    "explanation": "Markup price generally means the ratio of profit made to the cost paid. However this might vary from company and product nature.",
+    "correctText": "20%",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 58,
+    "question": "National list of essential drugs contains",
+    "options": [
+      "All drugs registered in the country",
+      "Single ingredient drug only",
+      "Relatively cheaper drugs only",
+      "Most needed drugs for majority of population"
+    ],
+    "answer": "D",
+    "explanation": "According to WHO essential drugs are the medicines that satisfy the priority health care needs of the population first published in 1977 and DDA published the first national list of medicines in 1986. Main criteria for selection of the medicines in the NLEM are public health relevance (harmonizing with standard treatment schedule use in primary health care service), efficacy, safety, cost-effectiveness and access.",
+    "correctText": "Most needed drugs for majority of population",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 59,
+    "question": "Which one of the following are not the criteria for banning a drug?",
+    "options": [
+      "Harmful",
+      "Expensive",
+      "Irrational combination",
+      "Misuse or abuse of drug"
+    ],
+    "answer": "B",
+    "explanation": "Main criteria for banning a drug is the risk of misuse and abuse, irrational use and harmful side effects.",
+    "correctText": "Expensive",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 60,
+    "question": "Which one is the least preferred method of pharmaceutical waste disposal:",
+    "options": [
+      "Return to donor or manufacturer",
+      "Burning in open container",
+      "Immobilization",
+      "Incineration"
+    ],
+    "answer": "B",
+    "explanation": "Return to donor or manufacture is most widely accepted method of pharmaceutical waste disposal mainly preferred for expired drugs or in case of any error. Immobilization includes two methods, encapsulation and intertization where waste is treated with lime cement and water then disposed of with municipal waste. Incineration is a thermal treatment where bulk solid waste is subjected to high heat combustion. But burning a pharmaceutical waste in open container is not recommended as it can have harmful impact on the environment.",
+    "correctText": "Burning in open container",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 61,
+    "question": "Moist heat sterilization is carried out at …..",
+    "options": [
+      "160 degree for 1 hour",
+      "180 degree for 30 min",
+      "121 degree for 15 to 30 min",
+      "121 degree for 10 min"
+    ],
+    "answer": "C",
+    "explanation": "Moist heat sterilization is effective than dry heat as the steam generated has more power to precipitate and coagulate the protein of microorganism due to high kinetic penetration pressure. This is carried out in autoclave maintained at temperature of 121°C and 15 lbs. pressure for 15 minutes.",
+    "correctText": "121 degree for 15 to 30 min",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 62,
+    "question": "Which one of the following dosage form does not require sterility test?",
+    "options": [
+      "Eye drop",
+      "Eye ointment",
+      "Ear drop",
+      "Rectal suppository"
+    ],
+    "answer": "D",
+    "explanation": "Ophthalmic preparations must always be sterile but when it comes to ear drops, though the outer layer of human ear isn’t sterile but non-sterile preparations might cause serious infection in middle ear. Another reason is marketed ear and eyes drops are uses reversibly hence, requires to be sterilized.",
+    "correctText": "Rectal suppository",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 63,
+    "question": "The incubation period for sterility testing is?",
+    "options": [
+      "7 days",
+      "10 days",
+      "14 days",
+      "21 days"
+    ],
+    "answer": "C",
+    "explanation": "WHO has published sterility testing guidelines that are applicable to biological medicinal products. Once the product sterility is done, it requires 14 days of long incubation time.",
+    "correctText": "14 days",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 64,
+    "question": "Which one among the following is the most potent anti-secretory agent?",
+    "options": [
+      "Omeprazole",
+      "Cimetidine",
+      "Pirenzepine",
+      "Misoprostol"
+    ],
+    "answer": "A",
+    "explanation": "Anti-secretory agent reduces the normal secretion of body fluids, these include H2-receptor antagonist, PPIs and antimuscarinic agent. Another term potency or potent refers to substance that show maximum activity even at low dose. Though all the given options are anti-secretory agent but keeping dose of each drug in mind, misoprostol is the most potent among given options. Omeprazole:20mg, Pirenzipine:50mg, Cimetidine:30mg and misoprostol 20mcg.",
+    "correctText": "Omeprazole",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 65,
+    "question": "Aconitine belongs to the group of ………",
+    "options": [
+      "Steroidal Alkaloids",
+      "Terpenoidal alkaloids",
+      "Indole alkaloids",
+      "Quinolone alkaloids"
+    ],
+    "answer": "B",
+    "explanation": "Aconitine is a terpenoidal alkaloid obtained from plant Aconite also known as devil’s helmet. It is barely soluble in water but soluble in organic solvents such as chloroform.",
+    "correctText": "Terpenoidal alkaloids",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 66,
+    "question": "What should be the friability limit of uncoated tablets?",
+    "options": [
+      "NMT 2%",
+      "NMT 1%",
+      "NMT 10%",
+      "NLT 2%"
+    ],
+    "answer": "B",
+    "explanation": "Friability test is performed to check the loss of tablet material due to shock abrasion during its handling and transportation. Limit is NMT 1%. It is official in USP but not in BP and IP.",
+    "correctText": "NMT 1%",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 67,
+    "question": "Titanium dioxide is commonly present in:",
+    "options": [
+      "Vanishing cream",
+      "Sunscreen cream",
+      "Aqueous Calamine cream",
+      "Ophthalmic cream"
+    ],
+    "answer": "B",
+    "explanation": "Titanium dioxide is used in sunscreen cream, reason behind this is it provides protection against UVA rays by acting as absorbent. Titanium and zinc oxide is used in combination to provide broad spectrum protection from UVA and UVB rays.",
+    "correctText": "Sunscreen cream",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 68,
+    "question": "The source of atropine is:",
+    "options": [
+      "Ephedra Species",
+      "Vinca eosea",
+      "Atropa belladonna",
+      "Berberis aristatata"
+    ],
+    "answer": "C",
+    "explanation": "Atropine is antimuscarinic agent works by competitively blocking cholinergic receptors. Atropine is naturally present in Atropa belladonna (the deadly nightshade)and Datura stramonium",
+    "correctText": "Atropa belladonna",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 69,
+    "question": "Steam distillation is used to isolate",
+    "options": [
+      "Volatile oil",
+      "Fixed oil",
+      "Alkaloid",
+      "Glycoside"
+    ],
+    "answer": "A",
+    "explanation": "Steam distillation is a separation process used to purify or isolate temperature-sensitive materials, such as natural aromatic compounds",
+    "correctText": "Volatile oil",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 70,
+    "question": "pH of a buffer system can be calculated by using:",
+    "options": [
+      "pH partition theory",
+      "Henderson-Hasselbalch equation",
+      "Michaelismenten equation",
+      "Noyes-Whitney’s equation"
+    ],
+    "answer": "B",
+    "explanation": "",
+    "correctText": "Henderson-Hasselbalch equation",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 71,
+    "question": "Suppositories should be store in …………..",
+    "options": [
+      "Cool place",
+      "Cold place",
+      "Frozen condition",
+      "Not specific"
+    ],
+    "answer": "A",
+    "explanation": "Cool place: 8°C and 15°C and Cold place : 2°C and 8°C",
+    "correctText": "Cool place",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 72,
+    "question": "Aspirin is contraindicated in children because of increased risk of:",
+    "options": [
+      "Gastric bleeding",
+      "Fancony syndrome",
+      "Reye’s syndrome",
+      "Ototoxicity"
+    ],
+    "answer": "C",
+    "explanation": "Aspirin is not used in children as it causes Reye’s syndrome which is a disorder that causes increases pressure to brain and massive accumulation of fat in liver. Fancony syndrome: It affects the proximal tubules and interfere with reabsorption.",
+    "correctText": "Reye’s syndrome",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 73,
+    "question": "The antagonist for Morphine like narcotic is",
+    "options": [
+      "Atropine",
+      "Penicillamine",
+      "Neostigmine",
+      "Naloxone"
+    ],
+    "answer": "D",
+    "explanation": "",
+    "correctText": "Naloxone",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 74,
+    "question": "Which one of the following is not anti-diabetic drug?",
+    "options": [
+      "Rosiglitazone",
+      "Chlorpropamide",
+      "Captopril",
+      "Metformin"
+    ],
+    "answer": "C",
+    "explanation": "",
+    "correctText": "Captopril",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 75,
+    "question": "Which one of the following is not a sulphonamide?",
+    "options": [
+      "Trimethoprim",
+      "Sulfadoxine",
+      "Sulfathiazole",
+      "Sulfadimidine"
+    ],
+    "answer": "A",
+    "explanation": "Sulfadoxine is a broad-spectrum sulfanilamide. Sulfathiazole is a short-acting sulfonamide antibiotic. Sulfadimidine or sulfamethazine is a sulfonamide antibacterial. Trimethoprim is a synthetic derivative of trimethoxybenzyl-pyrimidine and doesn’t belong to shulphonamide. But is widely used in fixed dose combination i.e. one part trimethoprim to five parts sulfamethoxazole.",
+    "correctText": "Trimethoprim",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 76,
+    "question": "Which one of the following drug is best to control fever?",
+    "options": [
+      "Paracetamol",
+      "Ibuprofen",
+      "Amlodipine",
+      "Tetracycline"
+    ],
+    "answer": "A",
+    "explanation": "",
+    "correctText": "Paracetamol",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 77,
+    "question": "The volume of distribution of a drug is ……..",
+    "options": [
+      "An expression of total body volume",
+      "A measure of total fluid volume",
+      "A relationship between the total amount of drug in the body and the concentration of the drug in the blood.",
+      "Proportional to bioavailability of the drug"
+    ],
+    "answer": "C",
+    "explanation": "The Volume of distribution is a major determinant of half-life and dosing frequency of a drug. Strategies to increase volume of distribution include adding lipophilicity and introducing basic functional groups",
+    "correctText": "A relationship between the total amount of drug in the body and the concentration of the drug in the blood.",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 78,
+    "question": "Antibiotic which interacts with calcium ion is …..",
+    "options": [
+      "Erythromycin",
+      "Streptomycin",
+      "Tetracycline",
+      "Ampicillin"
+    ],
+    "answer": "C",
+    "explanation": "Tetracycline forms chelates in presence of calcium ions; hence milk shouldn’t be consumed. In case of drug additive selection, diluents like calcium phosphate isn’t used in tetracycline preparations for same reason.",
+    "correctText": "Tetracycline",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 79,
+    "question": "In which of the following phase growth of bacteria is rapid?",
+    "options": [
+      "Log phase",
+      "Streptomycin",
+      "Tetracycline",
+      "Ampicillin"
+    ],
+    "answer": "A",
+    "explanation": "Lag phase: Microorganism is metabolically active but division doesn’t occur Log phase: Microorganism are active and rapidly growing Stationary phase: Plateau is reached where growth rate equals to death rate Death phase: Exponential decrease in living cells.",
+    "correctText": "Log phase",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 80,
+    "question": "How much Sulphur is required to prepare 30 gram of ointment containing 12%w/w Sulphur ointment?",
+    "options": [
+      "3.00 g",
+      "12 g",
+      "3.6 g",
+      "6 g"
+    ],
+    "answer": "C",
+    "explanation": "12%w/w means 12 gm Sulphur in 100gm ointment. Using unitary method If 100gm ointment contains 12 gm Sulphur Then ,30gm ointment will contain = (12/100)*30 = 3.6gm of Sulphur",
+    "correctText": "3.6 g",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 81,
+    "question": "The maximum tolerance limit for a 600mg tablet as per pharmacopoeia is",
+    "options": [
+      "+1%",
+      "+5%",
+      "+7.5%",
+      "+10%"
+    ],
+    "answer": "B",
+    "explanation": "According to IP/BP, tolerance limit for tablets below 80 mg and below 130 mg USP is ±10%. For tablets 80-250mg (IP/BP) & (130-324mg) is ±7.5% and for tablets weighing more than 250 mg(IP/BP) & more than 324 mg (USP) is ±5%",
+    "correctText": "+5%",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 82,
+    "question": "The agent which helps powder fuse or link particles to one another in tablet formulation is:",
+    "options": [
+      "Binder",
+      "Filler",
+      "Additive",
+      "Lubricants"
+    ],
+    "answer": "A",
+    "explanation": "Binder helps to bind, tablet materials but the concentration used should be optimum as it might cause problem in hardness, disintegration and dissolution of tablets example, Starch (2-5%) Filler or diluent helps to provide bulk to the dosage form example, lactose Additive includes all other non-pharmacologically active ingredient added to prepare a dosage form. Lubricants aids in lowering the friction between tablet and punch during compression example magnesium stearate (0.1-2%)",
+    "correctText": "Binder",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 83,
+    "question": "The content uniformity a tablet is necessary when the compression weight is:",
+    "options": [
+      "Below 50mg",
+      "Below 100mg",
+      "Below250mg",
+      "Below25mg"
+    ],
+    "answer": "D",
+    "explanation": "Content uniformity is different than assay as individual tablets are subjected to check the assay. According to USP tablets which has less than 25mg of active ingredient must be subjected to content uniformity test.",
+    "correctText": "Below25mg",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 84,
+    "question": "The provision of section 27 of drugs Act, 2035 is",
+    "options": [
+      "Trademark",
+      "Prescribing rights",
+      "Clinical trial",
+      "Prohibition of drug"
+    ],
+    "answer": "B",
+    "explanation": "Trademark - 36 Clinical trial - 31 Prescription right - 27",
+    "correctText": "Prescribing rights",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 85,
+    "question": "Which of the following drugs is the choice of drug for tape worm infestation?",
+    "options": [
+      "Niclosamide",
+      "Mebendazole",
+      "Metronidazole",
+      "Albendazole"
+    ],
+    "answer": "A",
+    "explanation": "",
+    "correctText": "Niclosamide",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 86,
+    "question": "Patient taking antihistamine should be advised for:",
+    "options": [
+      "Not to drive till the period you take medicine",
+      "Take plenty of water",
+      "Take after food",
+      "Take before meal"
+    ],
+    "answer": "A",
+    "explanation": "Antihistamines can cause drowsiness, hence patient consuming them must be advised not to drive and use machinery equipment while on these medications.",
+    "correctText": "Not to drive till the period you take medicine",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 87,
+    "question": "Amlodipine tablet is available in ….",
+    "options": [
+      "1mg, 2mg & 5mg",
+      "25mg, 50mg &100 mg",
+      "5mg, 10mg & 15mg",
+      "2.5 mg, 5mg & 10mg"
+    ],
+    "answer": "D",
+    "explanation": "",
+    "correctText": "2.5 mg, 5mg & 10mg",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 88,
+    "question": "Which of the following does not fall under essential medicine list of Nepal?",
+    "options": [
+      "Paracetamol",
+      "Ibuprofen + Paracetamol combination",
+      "Amoxicillin",
+      "Insulin"
+    ],
+    "answer": "B",
+    "explanation": "",
+    "correctText": "Ibuprofen + Paracetamol combination",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 89,
+    "question": "Persistent dry cough may occur as a side effect of the following antihypertensive drug",
+    "options": [
+      "Enalapril",
+      "Amlodipine",
+      "Atenolol",
+      "Methyldopa"
+    ],
+    "answer": "A",
+    "explanation": "",
+    "correctText": "Enalapril",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 90,
+    "question": "The estimated minimum adult daily requirement of riboflavin is 10mg. what number of tablet should be advised for daily therapeutic dose if the capsule contains 2.5mg?",
+    "options": [
+      "One BD",
+      "Two BD",
+      "Three BD",
+      "one in morning and 2 in evening"
+    ],
+    "answer": "B",
+    "explanation": "",
+    "correctText": "Two BD",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 91,
+    "question": "Which of the following vaccine should be stored below 0°C?",
+    "options": [
+      "Polio",
+      "DPT",
+      "TT",
+      "DT"
+    ],
+    "answer": "A",
+    "explanation": "Polio vaccine must be kept frozen between -15° to -25°C Diphtheria, tetanus, and pertussis vaccines should be refrigerated between 2°C-8°C.",
+    "correctText": "Polio",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 92,
+    "question": "Which of the following is not used as preservative?",
+    "options": [
+      "Benzoic acid",
+      "Benzyl alcohol",
+      "Methyl parabens",
+      "Propyl alcohol"
+    ],
+    "answer": "D",
+    "explanation": "",
+    "correctText": "Propyl alcohol",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 93,
+    "question": "The ratio of Sulphamethoxazole: Trimethoprim in Co-trimaxazole is:",
+    "options": [
+      "1:1",
+      "3:1",
+      "5:1",
+      "4:1"
+    ],
+    "answer": "C",
+    "explanation": "",
+    "correctText": "5:1",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 94,
+    "question": "Route of administration of Heparin is",
+    "options": [
+      "Oral",
+      "Sublingual",
+      "Subcutaneous",
+      "Intravenous"
+    ],
+    "answer": "C",
+    "explanation": "",
+    "correctText": "Subcutaneous",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 95,
+    "question": "Which of the following drug may cause hypoglycemia?",
+    "options": [
+      "Metformin",
+      "Captopril",
+      "Tamsulosin",
+      "Furosemide"
+    ],
+    "answer": "B",
+    "explanation": "",
+    "correctText": "Captopril",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 96,
+    "question": "If 0.05mgis converted into microgram it becomes…",
+    "options": [
+      "500mcg",
+      "0.0005mcg",
+      "5mcg",
+      "50mcg"
+    ],
+    "answer": "D",
+    "explanation": "1mg=1000mcg Now, 0.05x1000 mcg =50mcg",
+    "correctText": "50mcg",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 97,
+    "question": "Colchicine is used mainly to treat:",
+    "options": [
+      "Gout",
+      "Arthritis",
+      "Diabetes",
+      "High blood pressure"
+    ],
+    "answer": "A",
+    "explanation": "",
+    "correctText": "Gout",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 98,
+    "question": "The patient taking hyoscine may complain of ….",
+    "options": [
+      "Headache",
+      "Dry mouth",
+      "Skin rashes",
+      "Tinitus"
+    ],
+    "answer": "B",
+    "explanation": "Hyoscine being an anticholinergic agent decreases secretion of saliva.",
+    "correctText": "Dry mouth",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 99,
+    "question": "Which of the following drug is moisture sensitive?",
+    "options": [
+      "Ranitidine",
+      "Albendazole",
+      "Paracetamol",
+      "Carbamazepine"
+    ],
+    "answer": "A",
+    "explanation": "Ranitidine is a highly moisture sensitive drugs thus film coated.",
+    "correctText": "Ranitidine",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  },
+  {
+    "subject": "Pharmacy",
+    "college": "NPC",
+    "qnumber": 100,
+    "question": "The acidic drugs are better absorbed from…..",
+    "options": [
+      "Stomach",
+      "Distal small intestine",
+      "Proximal small intestine",
+      "Colon"
+    ],
+    "answer": "A",
+    "explanation": "Acidic drugs are better absorbed in acidic medium in the stomach as they remain unionized.",
+    "correctText": "Stomach",
+    "source": "Nepal Pharmacy Council License Exam Question Collection by Nabin Bist"
+  }
+]
