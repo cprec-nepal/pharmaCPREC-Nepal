@@ -487,7 +487,9 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 
 ## 11. Appendix — File & State Reference
 
-**File:** `index.html` (single-file application)
+**Files:** `index.html` + `tailwind.css` (pre-compiled) + `logo.png` (256px optimized)
+**Tailwind rebuild (after editing classes in `index.html`):** `npx tailwindcss -i input.css -o tailwind.css --minify` (config in `tailwind.config.js`)
+**Performance:** MCQs/filters cached 5 min in `localStorage`; dashboard loads profile/MCQs/filters/history in parallel (`Promise.all`)
 
 **Global State (`state` object):**
 ```js
