@@ -1136,9 +1136,10 @@
        const f = $('filter-faculty').value;
        const l = $('filter-level').value;
        if(f) list = list.filter(q => q.subject === f);
-       // Only apply the level filter when questions actually carry a `level`
-       // (the live backend may not), so we never break the real flow.
+       // Apply the Set filter only when questions actually carry `level` (demo)
+       // or `college` (live backend), so we never break the real flow.
        if(l && state.mcqs.some(q => q.level)) list = list.filter(q => q.level === l);
+       else if(l && state.mcqs.some(q => q.college)) list = list.filter(q => q.college === l);
        list = shuffle(list).slice(0, 10);
        
        if(!list.length) return toast("No questions found", "error");
