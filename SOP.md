@@ -6,12 +6,12 @@
 |---|---|
 | **System** | MCQ Master \| CPREC Nepal (`index.html` + `Code.gs`) |
 | **Document Title** | SOP for End-User Workflow |
-| **Version** | 2.0 |
+| **Version** | 3.0 |
 | **Effective Date** | 27 November 2026 |
 | **Owner** | CPREC Nepal |
 | **Applies To** | Students, Faculty, and Administrators using the MCQ Master web application |
 | **Backend** | Google Apps Script Web App — `Code.gs` (`doGet`/`doPost` → `handleRequest`) |
-| **Frontend** | Single-page application — `index.html` (HTML + Tailwind CSS + Vanilla JS) |
+| **Frontend** | Single-page application — `index.html` (HTML + Tailwind CSS + Vanilla JS) — includes Admin UI (SOP-14–16) |
 | **Data Store** | Google Sheets (9 sheets) + Google Drive (avatar folder) + GmailApp (OTP/approval emails) |
 
 ---
@@ -82,7 +82,8 @@ It ensures consistent, error-free use by students and support staff, and provide
 | `getFilters` | Fetch Faculty (`subjects`) / Set (`colleges`) lists | — | No |
 | `uploadAvatar` | Upload photo to Drive, returns URL | `email`, `token`, `base64Data`, `mimeType` | Token |
 | `updateProfile` | Save profile / password | `email`, `token`, `fullName`, `phone`, `college`, `newPassword` | Token |
-| `applyReferral` | Credit referrer (backend ready; not yet wired in frontend) | `email`, `token`, `code` | Token |
+| `applyReferral` | Credit referrer (wired in Settings → Apply Referral) | `email`, `token`, `code` | Token |
+| `getHistory` | Fetch own quiz history (newest first) | `email`, `token` | Token |
 | `saveScore` | Persist quiz result → QuizHistory | `email`, `subject`, `college`, `score`, `total`, `percentage` | No |
 | `getPendingUsers` | List Pending requests | `email`, `token` | **Admin** |
 | `approveUser` | Approve user, generate password+code, email credentials | `email`, `token`, `targetEmail` | **Admin** |
@@ -334,9 +335,9 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 
 ## 7A. Backend & Admin Procedures (Code.gs)
 
-> The frontend (`index.html`) currently exposes only the user workflow (SOP-01 → SOP-13).
-> Admin endpoints below are implemented in `Code.gs` and are ready for an Admin UI / direct API calls.
+> Admin UI is built into `index.html` (sidebar → **Admin**, visible only when `role === 'Admin'`).
 > All admin calls require a valid Admin `token` (checked by `isAdmin()` against `AdminSettings` + `EmailVerifications`).
+> Role is returned by `verifyCode`, stored in `localStorage` (`mcq_role`), and restored on auto-login.
 
 ### SOP-14 — Admin: Review & Approve Pending Users
 
@@ -397,8 +398,9 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 
 1. Referral code is auto-generated per user (`NAME + 4-digit`, e.g., `MANI1234`) and stored in `EmailVerifications` Col S.
 2. Registration stores the used code in `PendingRequests` Col F.
-3. `applyReferral` (backend ready) validates code, logs to `Referrals` sheet `[Date, Referrer, ReferredEmail, "Success"]`, increments referrer count (Col T), rejects self-referral.
-4. Frontend copy/share flow is SOP-10. Wiring `applyReferral` into registration is a pending frontend task.
+3. **Auto-credit on approval:** `approveUser` reads the referral code from the pending row and credits the referrer (logs to `Referrals`, increments Col T).
+4. **Manual apply:** Logged-in users can enter a code in Settings → *Apply a Referral Code* → `applyReferral` validates, logs, increments, rejects self-referral.
+5. Frontend copy/share flow is SOP-10; Overview → Referrals shows live `referralsCount` from `getProfile`.
 
 ### SOP-20 — Security & Locking Rules
 
@@ -408,6 +410,29 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 - OTP throttle: `sendCode` enforces 60-second gap using last-sent Date (Col D).
 - Passwords are stored in plain text in Sheets (Col O / AdminSettings Col F) — **restrict spreadsheet sharing to Admins only**; never share the sheet publicly.
 - `isSuperAdmin()` is hardcoded — to add a Super Admin, edit `Code.gs` and redeploy (SOP-17).
+
+
+### SOP-21 — Admin UI Walkthrough (Frontend)
+
+**When:** Logged in as Admin (`role === 'Admin'`).
+
+1. Sidebar shows **Admin** button with pending-count badge. Click to open `panel-admin`.
+2. **Pending Approvals:** list from `getPendingUsers`. Click **Approve** per user → confirm → `approveUser` → credentials emailed. List refreshes automatically.
+3. **Users:** list from `getUsers` (avatar, role, online status, logins). Per user:
+   - **Block / Unblock** → `toggleBlock`
+   - **Force Logout** → `forceLogout` (confirm first)
+4. **Add MCQ:** fill Subject, College/Set, Q Number, Question, Options A–D, Answer, optional Image/Explanation/CorrectText/Feedback → **Add MCQ** → `addMCQ`. Form clears and quiz filters refresh.
+5. **Delete MCQ:** enter Q Number → **Delete** → confirm → `deleteMCQ`.
+6. **Create Admin (Super Admin only):** visible only if your email is in `SUPER_ADMINS` (mirrors `isSuperAdmin()` in `Code.gs`). Enter email, name, role, password → **Create Admin** → `addAdminUser`. Backend rejects non-Super-Admins regardless of UI visibility.
+7. **Refresh All** reloads pending + users.
+
+### SOP-22 — History & Dashboard Stats (Live)
+
+1. On login, frontend calls `getHistory` (token-validated, own rows only, newest first) and renders:
+   - **Overview:** Quizzes = history count, Avg Score = mean of `percentage`, Referrals = `referralsCount` from `getProfile`.
+   - **History panel:** each attempt shows Subject, Date, College/Set, `Score/Total (Percentage%)`.
+2. **Refresh** button in History reloads via `getHistory`.
+3. Demo mode: history is empty; stats show 0.
 
 
 ---
@@ -506,6 +531,7 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 |---|---|---|---|
 | 1.0 | 2026-11-27 | CPREC Nepal | Initial SOP based on `index.html` workflow |
 | 2.0 | 2026-11-27 | CPREC Nepal | Added backend (`Code.gs`): admin approval flow, user/MCQ management, Drive avatars, referrals, sheet schema, deployment SOP |
+| 3.0 | 2026-11-27 | CPREC Nepal | Added Admin UI + referral/history wiring in `index.html`; backend: `getHistory`, referral auto-credit on approval, pending-aware `sendCode` |
 
 ---
 
