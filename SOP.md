@@ -4,14 +4,15 @@
 
 | Field | Detail |
 |---|---|
-| **System** | MCQ Master \| CPREC Nepal (`index.html`) |
+| **System** | MCQ Master \| CPREC Nepal (`index.html` + `Code.gs`) |
 | **Document Title** | SOP for End-User Workflow |
-| **Version** | 1.0 |
+| **Version** | 2.0 |
 | **Effective Date** | 27 November 2026 |
 | **Owner** | CPREC Nepal |
 | **Applies To** | Students, Faculty, and Administrators using the MCQ Master web application |
-| **Backend** | Google Apps Script Web App (API endpoint in `index.html` → `const API`) |
+| **Backend** | Google Apps Script Web App — `Code.gs` (`doGet`/`doPost` → `handleRequest`) |
 | **Frontend** | Single-page application — `index.html` (HTML + Tailwind CSS + Vanilla JS) |
+| **Data Store** | Google Sheets (9 sheets) + Google Drive (avatar folder) + GmailApp (OTP/approval emails) |
 
 ---
 
@@ -26,38 +27,41 @@ It ensures consistent, error-free use by students and support staff, and provide
 ## 2. Scope
 
 **In scope:**
-- User registration, login (OTP & password), and demo access
+- User registration (request → admin approval → credentials email), login (OTP & password), and demo access
 - Dashboard navigation (Overview / Settings / History)
 - Quiz setup with Faculty and Set filters
 - Quiz attempt, navigation, scoring, and result submission
-- Profile update, avatar upload, password change, and referral sharing
-- Logout and session handling
+- Profile update, avatar upload (Google Drive), password change, and referral sharing
+- Admin workflow: pending approvals, user management, MCQ management, blocking / force-logout
+- Backend deployment and sheet maintenance (`Code.gs`)
 
 **Out of scope:**
-- Backend (Google Apps Script / Google Sheets) administration
-- Question bank authoring and moderation
-- Server hosting, deployment, and access control
+- Google account / Workspace administration
+- Server hosting beyond Google Apps Script
 
 ## 3. Roles & Responsibilities
 
 | Role | Responsibilities |
 |---|---|
-| **Student / User** | Register/login, attempt quizzes, maintain own profile, share referral code |
+| **Student / User** | Register (request access), login, attempt quizzes, maintain own profile, share referral code |
 | **Faculty / Trainer** | Guide students through SOP; verify quiz results in History |
-| **Administrator** | Maintain question bank via backend API; resolve access issues; manage demo vs. live data |
+| **Administrator** | Approve/reject pending users, manage users (block / force-logout), add/delete MCQs, resolve access issues |
+| **Super Admin** | Create other admins (`addAdminUser`); hardcoded in `isSuperAdmin()` in `Code.gs` — only these emails can add admins |
 
 ## 4. System Overview
 
 ```
 ┌──────────────┐    HTTPS GET (query params)    ┌─────────────────────────┐
 │  index.html  │ ─────────────────────────────▶ │ Google Apps Script API  │
-│  (Frontend)  │ ◀───────────────────────────── │ (doGet → JSON response) │
-└──────┬───────┘                                └─────────────────────────┘
-       │ localStorage: mcq_token, mcq_email
-       ▼
-┌──────────────┐
-│  Browser     │  Demo fallback: bundled DEMO data (12 sample MCQs)
-└──────────────┘
+│  (Frontend)  │ ◀───────────────────────────── │ Code.gs: doGet/doPost   │
+└──────┬───────┘                                │ → handleRequest()       │
+       │ localStorage: mcq_token, mcq_email     └───────────┬─────────────┘
+       ▼                                                    │
+┌──────────────┐                              ┌─────────────┼─────────────┐
+│  Browser     │                              ▼             ▼             ▼
+└──────────────┘                        Google Sheets   Google Drive   GmailApp
+  Demo fallback: bundled DEMO data      (9 sheets)      (avatars)      (OTP / approval)
+  (12 sample MCQs)                      SS_ID in Code.gs
 ```
 
 **Key facts:**
@@ -68,17 +72,26 @@ It ensures consistent, error-free use by students and support staff, and provide
 
 ### 4.1 API Reference (Backend Contract)
 
-| `type` Parameter | Purpose | Key Parameters |
-|---|---|---|
-| `registerUser` | Create new account | `email`, `referralCode`, `ip` |
-| `sendCode` | Send OTP to email | `email`, `ip` |
-| `verifyCode` | Verify OTP **or** password login | `email`, `code`, `method=password` (optional) |
-| `getProfile` | Fetch user profile | `email`, `token` |
-| `getMCQs` | Fetch question bank | — |
-| `getFilters` | Fetch Faculty / Set lists | — |
-| `uploadAvatar` | Upload profile photo | `email`, `token`, `base64Data`, `mimeType` |
-| `updateProfile` | Save profile / password | `email`, `token`, `fullName`, `phone`, `college`, `newPassword` |
-| `saveScore` | Persist quiz result | `email`, `subject`, `college`, `score`, `total`, `percentage` |
+| `type` Parameter | Purpose | Key Parameters | Auth |
+|---|---|---|---|
+| `registerUser` | **Request** account (→ PendingRequests, admin approval required) | `email`, `referralCode`, `ip` | No |
+| `sendCode` | Send OTP to email (60s throttle) | `email`, `ip` | No |
+| `verifyCode` | Verify OTP **or** password login → returns `token`, `role` | `email`, `code`, `method=password` (optional) | No |
+| `getProfile` | Fetch user profile | `email`, `token` | Token |
+| `getMCQs` | Fetch question bank | — | No |
+| `getFilters` | Fetch Faculty (`subjects`) / Set (`colleges`) lists | — | No |
+| `uploadAvatar` | Upload photo to Drive, returns URL | `email`, `token`, `base64Data`, `mimeType` | Token |
+| `updateProfile` | Save profile / password | `email`, `token`, `fullName`, `phone`, `college`, `newPassword` | Token |
+| `applyReferral` | Credit referrer (backend ready; not yet wired in frontend) | `email`, `token`, `code` | Token |
+| `saveScore` | Persist quiz result → QuizHistory | `email`, `subject`, `college`, `score`, `total`, `percentage` | No |
+| `getPendingUsers` | List Pending requests | `email`, `token` | **Admin** |
+| `approveUser` | Approve user, generate password+code, email credentials | `email`, `token`, `targetEmail` | **Admin** |
+| `getUsers` | List all users (status, online, role, avatar) | `email`, `token` | **Admin** |
+| `toggleBlock` | Block / unblock user | `email`, `token`, `targetEmail` | **Admin** |
+| `forceLogout` | Clear user's token (kick session) | `email`, `token`, `targetEmail` | **Admin** |
+| `addMCQ` | Add question to MCQs sheet | `email`, `token`, `subject`, `college`, `qnumber`, `question`, `optionA-D`, `answer`, … | **Admin** |
+| `deleteMCQ` | Delete question by `qnumber` | `email`, `token`, `qnumber` | **Admin** |
+| `addAdminUser` | Create new admin (both sheets) | `email`, `token`, `newEmail`, `fullName`, `role`, `password` | **Super Admin only** |
 
 ---
 
@@ -129,20 +142,22 @@ flowchart TD
 
 ## 7. Detailed Procedures
 
-### SOP-01 — User Registration
+### SOP-01 — User Registration (Request → Admin Approval)
 
-**When:** A new user needs an account.
+**When:** A new user needs an account. **Registration does NOT create an account instantly** — it creates a *pending request* that an Admin must approve (SOP-14).
 
 1. On the Auth screen, click **“New user? Register”** (`btn-toggle-mode`).
    - Referral field appears; mode switches to `register`; method resets to OTP.
-2. Enter a valid **email** in `auth-email`.
-3. (Optional) Enter **Referral Code** in `auth-referral` — the code of the user who invited you.
+2. Enter a valid **email** in `auth-email` (must match `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|org|edu|net|gov|np|org\.np)$`).
+3. (Optional) Enter **Referral Code** in `auth-referral` — stored in PendingRequests Col F for later credit.
 4. Click **“Request Access”** (`btn-auth-action`).
-5. System calls `registerUser` with `email`, `referralCode`, `ip=web`.
-6. Observe toast:
-   - ✅ Success → proceed to login (OTP or password as instructed by backend message).
-   - ❌ Error → correct email / check referral code and retry.
-7. Log in using SOP-02 or SOP-03.
+5. Backend `registerUser` checks:
+   - Email not already in `EmailVerifications` → else “Email already registered.”
+   - No existing non-approved pending row → else “Request already pending approval.”
+   - Appends row to `PendingRequests`: `[Date, Email, IP, Location, "Pending", ReferralCode]`.
+6. Observe toast: “Request sent to Admin. Please wait for approval email.”
+7. **Wait for approval email** from `no-reply@mcqs.cprecnepal.org.np` containing generated password + temporary code (sent by Admin via SOP-14).
+8. After approval, log in using SOP-02 (OTP) or SOP-03 (password from approval email).
 
 > **Note:** Registration does not auto-login. Always complete a login step after registering.
 
@@ -317,12 +332,92 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 
 ---
 
+## 7A. Backend & Admin Procedures (Code.gs)
+
+> The frontend (`index.html`) currently exposes only the user workflow (SOP-01 → SOP-13).
+> Admin endpoints below are implemented in `Code.gs` and are ready for an Admin UI / direct API calls.
+> All admin calls require a valid Admin `token` (checked by `isAdmin()` against `AdminSettings` + `EmailVerifications`).
+
+### SOP-14 — Admin: Review & Approve Pending Users
+
+**When:** New registration requests arrive in `PendingRequests`.
+
+1. Call `getPendingUsers` with Admin `email` + `token`.
+   - Returns all rows where Status = `Pending` (`date`, `email`, `ip`, `location`).
+2. Verify the request (email domain, IP/location if needed). Reject by leaving Status as-is or manually editing the sheet.
+3. To approve, call `approveUser` with `email`, `token`, `targetEmail`.
+   - Backend verifies a `Pending` row exists and user does not already exist in `EmailVerifications`.
+   - Generates: 6-digit `code`, 8-char `password` (`generatePassword()`), referral code (`generateReferralCode()`).
+   - Appends user to `EmailVerifications` (20-col standard row, Role=`User`, Status=`Pending`).
+   - Sets Pending row Status → `Approved`.
+   - Emails credentials via `GmailApp.sendEmail` from `no-reply@mcqs.cprecnepal.org.np` (subject: “Account Approved - CPREC Nepal”).
+4. User receives password + temporary code and logs in via SOP-02 / SOP-03.
+5. On success toast: “User approved and credentials sent.”
+
+### SOP-15 — Admin: User Management
+
+| Action | Endpoint | Effect |
+|---|---|---|
+| List users | `getUsers` | Returns email, status, blocked flag, login count, Online/Offline, activity, role, avatar |
+| Block / Unblock | `toggleBlock` | Toggles `EmailVerifications` Col G between `Blocked` and empty. Blocked users cannot `sendCode` or `verifyCode`. |
+| Force logout | `forceLogout` | Clears Token (Col E) and sets Online=`No`. User must re-login. |
+| Create admin | `addAdminUser` | **Super Admin only** (`isSuperAdmin()`). Appends to both `AdminSettings` and `EmailVerifications`. |
+
+**Procedure:** Authenticate as Admin → call endpoint with `email`, `token`, `targetEmail` → verify toast / sheet change.
+
+### SOP-16 — Admin: MCQ Management
+
+1. **Add:** Call `addMCQ` with Admin credentials + `subject`, `college` (= Set), `qnumber`, `question`, `optionA–D`, `answer` (A/B/C/D), optional `image`, `explanation`, `correctText`, `fbA–D`.
+   - Appends 16-col row to `MCQs` sheet.
+2. **Delete:** Call `deleteMCQ` with `qnumber`.
+   - Deletes first matching row in `MCQs`.
+3. Verify via `getMCQs` / `getFilters` that the question and its Faculty/Set appear.
+
+> **Sheet mapping (MCQs):** Col A=Subject/Faculty, B=College/Set, C=QNumber/ID, D=Question, E–H=Options A–D, I=Answer, J=Image, K=Explanation, L=CorrectText, M–P=Feedback A–D.
+> Frontend “Set” filter maps to `college` (Col B) in live mode; demo data uses `level`.
+
+### SOP-17 — Backend Deployment (Google Apps Script)
+
+1. Open the Apps Script project linked to the spreadsheet (`SS_ID` in `Code.gs`).
+2. Replace `Code.gs` content with the repo version (`Code.gs` in this repository).
+3. **Deploy → Manage deployments → Edit → New version** (do NOT create a new deployment if you want to keep the same `/exec` URL used in `index.html` → `const API`).
+4. Set: *Execute as: Me*, *Who has access: Anyone*.
+5. Authorize scopes on first run (Sheets, Drive, Gmail).
+6. Test: open `…/exec?type=getFilters` in browser → expect `{"success":true,"subjects":[…],"colleges":[…]}`.
+7. Update `const API` in `index.html` only if the deployment URL changes.
+
+### SOP-18 — Avatar Upload (Drive)
+
+1. User selects image in Settings (SOP-09) → frontend sends Base64 via `uploadAvatar`.
+2. Backend decodes Base64 → creates Blob → saves to Drive folder (`DRIVE_FOLDER_ID`) as `NAME_Email_Photo`.
+3. Sets sharing to *Anyone with link (View)* → returns `https://drive.google.com/uc?export=view&id=FILE_ID`.
+4. URL stored in `EmailVerifications` Col P (Index 15) and returned to frontend.
+
+### SOP-19 — Referral Credit
+
+1. Referral code is auto-generated per user (`NAME + 4-digit`, e.g., `MANI1234`) and stored in `EmailVerifications` Col S.
+2. Registration stores the used code in `PendingRequests` Col F.
+3. `applyReferral` (backend ready) validates code, logs to `Referrals` sheet `[Date, Referrer, ReferredEmail, "Success"]`, increments referrer count (Col T), rejects self-referral.
+4. Frontend copy/share flow is SOP-10. Wiring `applyReferral` into registration is a pending frontend task.
+
+### SOP-20 — Security & Locking Rules
+
+- Every request runs under `LockService.getScriptLock().tryLock(10000)` — concurrent writes are serialized; do not remove.
+- Token validation: `getProfile` / `updateProfile` / `uploadAvatar` compare sheet Token (Col E) to supplied `token`.
+- Blocked accounts (`Blocked` in Col G) are rejected at `sendCode` and `verifyCode`.
+- OTP throttle: `sendCode` enforces 60-second gap using last-sent Date (Col D).
+- Passwords are stored in plain text in Sheets (Col O / AdminSettings Col F) — **restrict spreadsheet sharing to Admins only**; never share the sheet publicly.
+- `isSuperAdmin()` is hardcoded — to add a Super Admin, edit `Code.gs` and redeploy (SOP-17).
+
+
+---
+
 ## 8. End-to-End Workflow Checklist (Quick Reference)
 
 | # | Action | Screen | Success Indicator |
 |---|---|---|---|
 | 1 | Open app | Auth | Welcome screen visible |
-| 2 | Register (if new) | Auth | Toast confirmation |
+| 2 | Register (if new) → Admin approves (SOP-14) | Auth → Email | “Request sent to Admin” → approval email with password+code |
 | 3 | Login (OTP/Password/Demo) | Auth → Dashboard | “Welcome back!” / Dashboard loads |
 | 4 | Select Faculty/Set | Dashboard sidebar | Filters selected; Start Quiz enabled |
 | 5 | Start Quiz | Quiz | Question 1 displayed; progress bar at 10% |
@@ -388,11 +483,29 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 
 ---
 
+
+### Appendix B — Google Sheets Schema (Code.gs)
+
+| Sheet | Purpose | Key Columns |
+|---|---|---|
+| `EmailVerifications` | User accounts (source of truth) | A:Email, B:Code, C:Status, D:Date, E:Token, F:LoginCount, G:Blocked, H:Online, I:Activity, J:Role, K:FullName, L:LoginTime, M:LastActive, N:Duration, O:Password, P:Avatar, Q:Phone, R:College, S:RefCode, T:RefCount |
+| `MCQs` | Question bank | A:Subject, B:College/Set, C:QNumber, D:Question, E–H:Options, I:Answer, J:Image, K:Explanation, L:CorrectText, M–P:Feedback |
+| `PendingRequests` | Registration queue | A:Date, B:Email, C:IP, D:Location, E:Status, F:ReferralCode |
+| `AdminSettings` | Admin accounts | A:Email, B:FullName, C:Status, D:Role, E:Token, F:Password, G:CreatedOn |
+| `QuizHistory` | Score log | A:Date, B:Email, C:Subject, D:College, E:Score, F:Total, G:Percentage |
+| `Referrals` | Referral log | A:Date, B:Referrer, C:ReferredEmail, D:Status |
+| `CodeBackups` | OTP audit backup | A:Email, B:Code, C:Date, D:—, E:IP, F:Location |
+| `DeniedLogins` | Failed / unregistered attempts | A:Date, B:IP, C:Location, D:Reason |
+| `UserActivity` | Login activity log | A:Date, B:Email, C:Action, D:IP, E:Location, F:Token |
+
+**Config in `Code.gs`:** `SS_ID` (Spreadsheet ID), `DRIVE_FOLDER_ID` (Avatar folder), sender `no-reply@mcqs.cprecnepal.org.np`, Super Admins in `isSuperAdmin()`.
+
 ## 12. Revision History
 
 | Version | Date | Author | Change |
 |---|---|---|---|
 | 1.0 | 2026-11-27 | CPREC Nepal | Initial SOP based on `index.html` workflow |
+| 2.0 | 2026-11-27 | CPREC Nepal | Added backend (`Code.gs`): admin approval flow, user/MCQ management, Drive avatars, referrals, sheet schema, deployment SOP |
 
 ---
 
