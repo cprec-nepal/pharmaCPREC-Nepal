@@ -381,12 +381,30 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 ### SOP-17 — Backend Deployment (Google Apps Script)
 
 1. Open the Apps Script project linked to the spreadsheet (`SS_ID` in `Code.gs`).
-2. Replace `Code.gs` content with the repo version (`Code.gs` in this repository).
+2. Replace `Code.gs` content with the repo version (`Code.gs` in this repository). ⚠️ Do **not** redeploy an older copy — it silently loses `getHistory`, referral auto-credit, and pending-aware `sendCode`.
 3. **Deploy → Manage deployments → Edit → New version** (do NOT create a new deployment if you want to keep the same `/exec` URL used in `index.html` → `const API`).
 4. Set: *Execute as: Me*, *Who has access: Anyone*.
 5. Authorize scopes on first run (Sheets, Drive, Gmail).
-6. Test: open `…/exec?type=getFilters` in browser → expect `{"success":true,"subjects":[…],"colleges":[…]}`.
+6. Test: open `…/exec?type=getFilters` in browser → expect `{"success":true,"subjects":[…],"colleges":[…]}`. Also test `…/exec?type=getMCQs` → expect the question list.
 7. Update `const API` in `index.html` only if the deployment URL changes.
+
+**App not loading after deployment — checklist (in order of likelihood):**
+
+| # | Cause | Symptom | Fix |
+|---|---|---|---|
+| 1 | Created a **new deployment** (new URL) | Every request fails; toasts "Network Error" / "Couldn't load questions" | Use *Manage deployments → Edit → New version* to keep the URL, **or** update `const API` in `index.html` to the new `/exec` URL |
+| 2 | *Who has access* ≠ **Anyone** | Browser test URL shows a Google sign-in page, not JSON | Redeploy with *Who has access: Anyone* |
+| 3 | *Execute as* ≠ **Me** | Visitors asked to authorize / get error page | Redeploy with *Execute as: Me* |
+| 4 | New code **not published as a new version** | `/exec` still serves old code | *Manage deployments → Edit → Version: New version → Deploy* |
+| 5 | Not **re-authorized** after pasting new code | Error page at `/exec` | Run any function in the editor once → complete *Review permissions* |
+| 6 | Spreadsheet **missing sheets** (`MCQs`, `EmailVerifications`, `CodeBackups`, `UserActivity`) | Every request returns `{success:false, error: TypeError…}` | Use repo `Code.gs` — it auto-creates all 9 sheets with headers |
+| 7 | `MCQs` sheet **empty** | No live questions (bundled NPC set still works after merge of the instant-load PR) | Load the bank: SOP-23 (paste `mcqs-npc.csv` into the MCQs sheet) |
+| 8 | Frontend copy is **outdated** | No NPC bundle / old API URL / old cache behavior | Serve the latest `index.html` **and** `mcqs-npc-data.js` from the repo root together |
+| 9 | Gmail alias not configured | `sendCode` returns "Email failed to send." | Configure `no-reply@mcqs.cprecnepal.org.np` as a *Send mail as* alias on the deploying Google account, or change the sender in `Code.gs` |
+
+**60-second isolation test:** open `…/exec?type=getFilters` in a browser.
+- **JSON appears** → backend is fine; the problem is the frontend (`const API` URL mismatch, outdated `index.html`, or the app hosted without `mcqs-npc-data.js`).
+- **Sign-in page / error page /Apps Script error** → backend deployment settings (rows 2–5) or spreadsheet (row 6).
 
 ### SOP-18 — Avatar Upload (Drive)
 
@@ -576,6 +594,7 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 | 3.0 | 2026-11-27 | CPREC Nepal | Added Admin UI + referral/history wiring in `index.html`; backend: `getHistory`, referral auto-credit on approval, pending-aware `sendCode` |
 | 3.1 | 2026-11-27 | CPREC Nepal | Added SOP-23 (admin: load NPC bank from GitHub) and SOP-24 (candidate: take NPC exam); Set filter now matches `college` (live) as well as `level` (demo); NPC troubleshooting rows |
 | 3.2 | 2026-11-27 | CPREC Nepal | Instant model-exam load: bundled `mcqs-npc-data.js` (Pharmacy/NPC), pre-auth prefetch of public MCQs/filters, stale-while-revalidate localStorage cache (24 h fresh window), backend-over-bundle merge; SOP-24 + Appendix updated |
+| 3.3 | 2026-11-27 | CPREC Nepal | Deployment hardening: `Code.gs` auto-creates all 9 sheets incl. headers (fresh-spreadsheet TypeError fix); SOP-17 "app not loading" checklist + 60-second isolation test |
 
 ---
 

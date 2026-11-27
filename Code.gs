@@ -17,15 +17,16 @@ function handleRequest(e) {
     
     const ss = SpreadsheetApp.openById(SS_ID);
 
-    // --- INITIALIZE SHEETS ---
+    // --- INITIALIZE SHEETS --- (auto-create any missing sheet so a fresh
+    // spreadsheet can never crash every request with a TypeError)
     const sheets = {
-      mcq: ss.getSheetByName("MCQs"),
-      verify: ss.getSheetByName("EmailVerifications"),
-      backup: ss.getSheetByName("CodeBackups"),
+      mcq: ss.getSheetByName("MCQs") || ss.insertSheet("MCQs"),
+      verify: ss.getSheetByName("EmailVerifications") || ss.insertSheet("EmailVerifications"),
+      backup: ss.getSheetByName("CodeBackups") || ss.insertSheet("CodeBackups"),
       deny: ss.getSheetByName("DeniedLogins") || ss.insertSheet("DeniedLogins"),
       history: ss.getSheetByName("QuizHistory") || ss.insertSheet("QuizHistory"),
       admin: ss.getSheetByName("AdminSettings") || ss.insertSheet("AdminSettings"),
-      activity: ss.getSheetByName("UserActivity"),
+      activity: ss.getSheetByName("UserActivity") || ss.insertSheet("UserActivity"),
       pending: ss.getSheetByName("PendingRequests") || ss.insertSheet("PendingRequests"),
       referrals: ss.getSheetByName("Referrals") || ss.insertSheet("Referrals")
     };
@@ -36,11 +37,15 @@ function handleRequest(e) {
     // 10:Name, 11:LoginTime, 12:LastActive, 13:Duration, 14:Password, 
     // 15:Avatar, 16:Phone, 17:College, 18:RefCode, 19:RefCount
     
+    if (sheets.mcq.getLastRow() === 0) sheets.mcq.appendRow(["Subject", "College", "QNumber", "Question", "OptionA", "OptionB", "OptionC", "OptionD", "Answer", "Image", "Explanation", "CorrectText", "FeedbackA", "FeedbackB", "FeedbackC", "FeedbackD"]);
+    if (sheets.verify.getLastRow() === 0) sheets.verify.appendRow(["Email", "Code", "Status", "Date", "Token", "Count", "Blocked", "Online", "Activity", "Role", "Name", "LoginTime", "LastActive", "Duration", "Password", "Avatar", "Phone", "College", "RefCode", "RefCount"]);
     if (sheets.history.getLastRow() === 0) sheets.history.appendRow(["Date", "Email", "Subject", "College", "Score", "Total", "Percentage"]);
     if (sheets.pending.getLastRow() === 0) sheets.pending.appendRow(["Date", "Email", "IP", "Location", "Status", "ReferralCode"]);
     if (sheets.admin.getLastRow() === 0) sheets.admin.appendRow(["Email", "FullName", "Status", "Role", "Token", "Password", "CreatedOn"]);
     if (sheets.deny.getLastRow() === 0) sheets.deny.appendRow(["Date", "IP", "Location", "Reason"]);
     if (sheets.referrals.getLastRow() === 0) sheets.referrals.appendRow(["Date", "Referrer", "ReferredEmail", "Status"]);
+    if (sheets.activity.getLastRow() === 0) sheets.activity.appendRow(["Date", "Email", "Action", "IP", "Location", "Token"]);
+    if (sheets.backup.getLastRow() === 0) sheets.backup.appendRow(["Email", "Code", "Date", "D", "IP", "Location"]);
 
     const type = e.parameter.type;
 
