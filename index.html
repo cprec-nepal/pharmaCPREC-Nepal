@@ -541,6 +541,8 @@
      </div>
   </div>
 
+  <!-- Bundled model exam set: quiz-ready instantly, no backend roundtrip -->
+  <script src="mcqs-npc-data.js"></script>
   <script>
     const API = "https://script.google.com/macros/s/AKfycbw_DyZfWEpg5Z6Ex0J3aCLrM6PBWlsZp7sdOPPSemuCFG-KjslgvdENF9uscqlM5uF7/exec";
     
@@ -611,15 +613,16 @@
        }
     };
 
-    // --- Fast-load cache: MCQs + filters cached 5 min (stale-while-revalidate) ---
-    const CACHE_TTL = 5 * 60 * 1000;
+    // --- Instant-load cache: seed the UI from localStorage/bundled NPC set,
+    // always revalidate in the background (stale-while-revalidate) ---
+    const CACHE_TTL = 24 * 60 * 60 * 1000; // "fresh" window; stale data still renders instantly
     const cacheGet = (key) => {
        try {
           const raw = localStorage.getItem('mcq_cache_' + key);
           if (!raw) return null;
           const { ts, data } = JSON.parse(raw);
-          if (Date.now() - ts > CACHE_TTL) return null;
-          return data;
+          if (!data) return null;
+          return { data, fresh: (Date.now() - ts) <= CACHE_TTL };
        } catch(e) { return null; }
     };
     const cacheSet = (key, data) => {
@@ -628,6 +631,28 @@
     const cacheClear = () => {
        ['mcqs', 'filters'].forEach(k => localStorage.removeItem('mcq_cache_' + k));
     };
+
+    // Merge backend questions over the bundled NPC set; dedupe by subject|college|qnumber
+    const mergeMcqs = (backend, bundled) => {
+       const seen = new Map();
+       const keyOf = (q) => `${(q.subject||'').trim()}|${(q.college||q.level||'').trim()}|${q.qnumber ?? ''}|${String(q.q||'').slice(0,60)}`;
+       [...(bundled||[]), ...(backend||[])].forEach(q => { if (q && q.q) seen.set(keyOf(q), q); });
+       return [...seen.values()];
+    };
+
+    // --- Pre-auth prefetch: warm the public MCQs/filters while the user is
+    // still on the auth screen, so login shows the set instantly ---
+    let prefetchMcqs = null, prefetchFilters = null;
+    try {
+       prefetchMcqs = api({ type: 'getMCQs' }).then(r => {
+          if (r.success && Array.isArray(r.mcqs) && r.mcqs.length) cacheSet('mcqs', r.mcqs);
+          return r;
+       }).catch(() => ({ success: false }));
+       prefetchFilters = api({ type: 'getFilters' }).then(r => {
+          if (r.success && Array.isArray(r.subjects) && r.subjects.length) cacheSet('filters', { subjects: r.subjects, colleges: r.colleges || [] });
+          return r;
+       }).catch(() => ({ success: false }));
+    } catch(e) { prefetchMcqs = prefetchFilters = null; }
 
     // --- Nav ---
     const showStep = (id) => {
@@ -781,28 +806,35 @@
           return;
        }
        
-       // Fast path: use fresh cache instantly, refresh in background
+       // INSTANT path: seed from cache or the bundled NPC model set — quiz is
+       // ready before any network call. Fresh data still arrives in background.
        const cachedMcqs = cacheGet('mcqs');
        const cachedFilters = cacheGet('filters');
-       if (cachedMcqs && cachedMcqs.length) {
-          state.mcqs = cachedMcqs;
-          updateUI();
-          if (cachedFilters) {
-             $('filter-faculty').innerHTML = '<option value="">All Faculties</option>' + cachedFilters.subjects.map(s => `<option value="${s}">${s}</option>`).join('');
-             $('filter-level').innerHTML = '<option value="">All Sets</option>' + cachedFilters.colleges.map(c => `<option value="${c}">${c}</option>`).join('');
-          } else {
-             populateFilters();
-          }
-          $('btn-start-quiz').disabled = false;
-          syncResetBtn();
+       state.mcqs = (cachedMcqs && cachedMcqs.data.length)
+          ? cachedMcqs.data
+          : mergeMcqs([], window.NPC_MCQS || []);
+       updateUI();
+       if (cachedFilters) {
+          $('filter-faculty').innerHTML = '<option value="">All Faculties</option>' + cachedFilters.data.subjects.map(s => `<option value="${s}">${s}</option>`).join('');
+          $('filter-level').innerHTML = '<option value="">All Sets</option>' + cachedFilters.data.colleges.map(c => `<option value="${c}">${c}</option>`).join('');
+       } else {
+          populateFilters();
        }
-       $('dash-loading').classList.remove('hidden');
+       $('btn-start-quiz').disabled = false;
+       syncResetBtn();
+       const needsRefresh = !cachedMcqs || !cachedMcqs.fresh || !cachedFilters || !cachedFilters.fresh;
+       if (needsRefresh) $('dash-loading').classList.remove('hidden');
 
-       // Load everything IN PARALLEL (was sequential — 4-5x slower)
+       // REVALIDATE in parallel: profile/history always; MCQs/filters refresh
+       // via the pre-auth prefetch (started at page load) when available.
+       // Prefetch promises are consumed once — later initDashboard calls
+       // (e.g. after Add/Delete MCQ) always fetch fresh.
+       const pm = prefetchMcqs; prefetchMcqs = null;
+       const pf = prefetchFilters; prefetchFilters = null;
        const [pRes, mRes, fRes, hRes] = await Promise.all([
           api({ type: 'getProfile', email: state.email, token: state.token }),
-          cachedMcqs ? Promise.resolve({ success: true, mcqs: cachedMcqs, cached: true }) : api({ type: 'getMCQs' }),
-          cachedFilters ? Promise.resolve({ success: true, subjects: cachedFilters.subjects, colleges: cachedFilters.colleges, cached: true }) : api({ type: 'getFilters' }),
+          pm || api({ type: 'getMCQs' }),
+          pf || api({ type: 'getFilters' }),
           api({ type: 'getHistory', email: state.email, token: state.token })
        ]);
 
@@ -814,19 +846,17 @@
        updateUI();
 
        if(mRes.success && Array.isArray(mRes.mcqs) && mRes.mcqs.length) {
-          state.mcqs = mRes.mcqs;
-          if (!mRes.cached) cacheSet('mcqs', mRes.mcqs);
-       } else if (!cachedMcqs) {
-          state.mcqs = DEMO.mcqs;
-          toast("Couldn't load questions — using sample set", "error");
+          cacheSet('mcqs', mRes.mcqs);
+          const merged = mergeMcqs(mRes.mcqs, window.NPC_MCQS || []);
+          if (JSON.stringify(merged) !== JSON.stringify(state.mcqs)) {
+             state.mcqs = merged;
+             populateFilters();
+          }
        }
 
-       if(fRes.success) {
+       if(fRes.success && Array.isArray(fRes.subjects) && fRes.subjects.length) {
           $('filter-faculty').innerHTML = '<option value="">All Faculties</option>' + fRes.subjects.map(s => `<option value="${s}">${s}</option>`).join('');
-          $('filter-level').innerHTML = '<option value="">All Sets</option>' + fRes.colleges.map(c => `<option value="${c}">${c}</option>`).join('');
-          if (!fRes.cached) cacheSet('filters', { subjects: fRes.subjects, colleges: fRes.colleges });
-       } else if (!cachedFilters) {
-          populateFilters();
+          $('filter-level').innerHTML = '<option value="">All Sets</option>' + (fRes.colleges || []).map(c => `<option value="${c}">${c}</option>`).join('');
        }
 
        if(hRes.success && Array.isArray(hRes.history)) {

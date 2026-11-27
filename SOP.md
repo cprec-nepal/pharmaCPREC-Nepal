@@ -458,7 +458,7 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
    - **Faculty** → select `Pharmacy`.
    - **Set** → select `NPC`.
    - Click **Reset** first if filters were left over from a previous session.
-3. Click **Start Quiz**. The system takes all Pharmacy/NPC questions, **Fisher-Yates shuffles** them, and serves **10 questions per attempt** (the bank has 100, so repeated attempts draw different questions).
+3. Click **Start Quiz**. The system takes all Pharmacy/NPC questions, **Fisher-Yates shuffles** them, and serves **10 questions per attempt** (the bank has 100, so repeated attempts draw different questions). The NPC model set is **bundled with the app** (`mcqs-npc-data.js`) and cached locally, so it is quiz-ready **instantly** — no wait for the backend.
 4. **Answer each question** (SOP-07): click an option card — correct turns green, wrong turns red with the correct answer highlighted; the answer locks. Use **Prev/Next** to navigate; there is **no time limit**.
 5. **Finish** (SOP-08): confirm if questions remain unanswered. Score is saved via `saveScore` with Subject = `Pharmacy` and appears on the Results screen as `X/10 (Z%)`.
 6. **Review:** the attempt appears in **History** (Subject Pharmacy, Set/College shown, score, date). Each row's percentage feeds the Overview average.
@@ -521,9 +521,14 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 
 ## 11. Appendix — File & State Reference
 
-**Files:** `index.html` + `tailwind.css` (pre-compiled) + `logo.png` (256px optimized)
+**Files:** `index.html` + `tailwind.css` (pre-compiled) + `logo.png` (256px optimized) + `mcqs-npc-data.js` (bundled NPC model set, auto-generated from `mcqs-npc.json`)
 **Tailwind rebuild (after editing classes in `index.html`):** `npx tailwindcss -i input.css -o tailwind.css --minify` (config in `tailwind.config.js`)
-**Performance:** MCQs/filters cached 5 min in `localStorage`; dashboard loads profile/MCQs/filters/history in parallel (`Promise.all`)
+**Performance (instant load):**
+1. **Bundled model exam set** — `mcqs-npc-data.js` (Pharmacy/NPC, 100 MCQs) ships with the page; the quiz is startable before any backend call.
+2. **Pre-auth prefetch** — `getMCQs` + `getFilters` are fetched while the user is still on the login screen (public endpoints).
+3. **Stale-while-revalidate cache** — `localStorage` (`mcq_cache_mcqs`/`mcq_cache_filters`) seeds the dashboard instantly (24 h "fresh" window; stale data still renders, then revalidates). Dashboard loads profile/MCQs/filters/history in parallel (`Promise.all`).
+4. **Merge rule** — backend questions override the bundle by key `subject|college|qnumber`; the bundle fills gaps and keeps the set available when the backend is slow/offline. Prefetch promises are consumed once, so Add/Delete MCQ always triggers a fresh fetch.
+5. **Regenerating the bundle:** after editing `mcqs-npc.json`, rebuild `mcqs-npc-data.js` with the same entry shape (`{ q, options[4], answer, subject, college, qnumber, explanation }`) — `window.NPC_MCQS = [...]`.
 
 **Global State (`state` object):**
 ```js
@@ -570,6 +575,7 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 | 2.0 | 2026-11-27 | CPREC Nepal | Added backend (`Code.gs`): admin approval flow, user/MCQ management, Drive avatars, referrals, sheet schema, deployment SOP |
 | 3.0 | 2026-11-27 | CPREC Nepal | Added Admin UI + referral/history wiring in `index.html`; backend: `getHistory`, referral auto-credit on approval, pending-aware `sendCode` |
 | 3.1 | 2026-11-27 | CPREC Nepal | Added SOP-23 (admin: load NPC bank from GitHub) and SOP-24 (candidate: take NPC exam); Set filter now matches `college` (live) as well as `level` (demo); NPC troubleshooting rows |
+| 3.2 | 2026-11-27 | CPREC Nepal | Instant model-exam load: bundled `mcqs-npc-data.js` (Pharmacy/NPC), pre-auth prefetch of public MCQs/filters, stale-while-revalidate localStorage cache (24 h fresh window), backend-over-bundle merge; SOP-24 + Appendix updated |
 
 ---
 
