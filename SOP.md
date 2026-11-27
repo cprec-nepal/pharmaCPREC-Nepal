@@ -240,7 +240,7 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
    - System filters questions, applies **Fisher-Yates shuffle**, and selects up to **10 questions**.
    - If no questions match: toast “No questions found” — change filters and retry.
 
-> **Rule:** The Set filter is only applied when questions actually carry a `level` field, to avoid breaking the live backend flow.
+> **Rule:** The Set filter is applied when questions carry a `level` field (demo data) **or** a `college` field (live backend, e.g. NPC), so both demo and live sets filter correctly.
 
 ---
 
@@ -435,6 +435,35 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 2. **Refresh** button in History reloads via `getHistory`.
 3. Demo mode: history is empty; stats show 0.
 
+### SOP-23 — Admin: Load the NPC Question Bank (Pharmacy / NPC)
+
+**One-time setup** so candidates can take exams from the 100-question NPC bank (repo files `mcqs-npc.json` / `mcqs-npc.csv`, added in PR #12).
+
+1. Open `mcqs-npc.csv` on GitHub → click **Raw** → **Select All → Copy** (or download the file).
+2. Open the backend spreadsheet (`SS_ID` in `Code.gs`) → **MCQs** sheet.
+3. Paste starting at **row 2, columns A–P** (Subject, College, QNumber, Question, OptionA–D, Answer, Image, Explanation, CorrectText, FeedbackA–D). Do not overwrite the header row.
+4. Verify the paste: 101 rows total (header + 100), Subject = `Pharmacy`, College = `NPC`, QNumber 1–100, Answer ∈ {A, B, C, D}.
+5. Verify in the app: reload Dashboard → Faculty dropdown shows **Pharmacy**, Set dropdown shows **NPC**; Start Quiz with Faculty = Pharmacy, Set = NPC returns questions.
+6. **Answer key caution:** the source PDF has explanations but no key; answers were inferred (see `mcqs-npc-README.md`). Spot-check before publishing — especially questions listed in the README as inferred without an explanation.
+7. Alternative for single questions: Admin UI → Add MCQ (SOP-16 / SOP-21). Bulk endpoint is a future enhancement.
+
+> **Rule:** Never edit `Answer`/`CorrectText` directly in the app for the NPC set without also updating the repo JSON/CSV — GitHub is the source of truth for this bank.
+
+### SOP-24 — Candidate: Taking an Exam from the NPC Bank (Pharmacy / NPC)
+
+**When:** Sitting a practice exam from the NPC question collection.
+
+1. **Login** (SOP-02 OTP / SOP-03 password; demo mode does **not** contain NPC questions).
+2. On the Dashboard, in **Quiz Setup**:
+   - **Faculty** → select `Pharmacy`.
+   - **Set** → select `NPC`.
+   - Click **Reset** first if filters were left over from a previous session.
+3. Click **Start Quiz**. The system takes all Pharmacy/NPC questions, **Fisher-Yates shuffles** them, and serves **10 questions per attempt** (the bank has 100, so repeated attempts draw different questions).
+4. **Answer each question** (SOP-07): click an option card — correct turns green, wrong turns red with the correct answer highlighted; the answer locks. Use **Prev/Next** to navigate; there is **no time limit**.
+5. **Finish** (SOP-08): confirm if questions remain unanswered. Score is saved via `saveScore` with Subject = `Pharmacy` and appears on the Results screen as `X/10 (Z%)`.
+6. **Review:** the attempt appears in **History** (Subject Pharmacy, Set/College shown, score, date). Each row's percentage feeds the Overview average.
+7. **Repeat:** return to Dashboard and Start Quiz again for a fresh random 10 questions from the bank.
+8. If **“No questions found”** appears: the NPC bank has not been loaded into the MCQs sheet yet — admin must complete SOP-23 first.
 
 ---
 
@@ -453,6 +482,8 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 | 9 | Update Profile (optional) | Dashboard → Settings | “Profile saved!” toast |
 | 10 | Logout | Sidebar | Returns to Auth screen |
 
+**NPC exam quick path (SOP-23/24):** Admin pastes `mcqs-npc.csv` into MCQs sheet → candidate logs in → Faculty `Pharmacy` + Set `NPC` → Start Quiz → 10 random NPC questions → Finish → Score in History.
+
 ---
 
 ## 9. Troubleshooting
@@ -470,6 +501,9 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 | Avatar upload fails | File too large / unsupported type | Use JPG/PNG; try a smaller image |
 | Stuck on Auth after login | Token not saved | Clear cache, re-login; check browser allows localStorage |
 | Scores not appearing in History | Demo mode or saveScore failure | Use live login (not demo); check backend logs |
+| “No questions found” with Faculty=Pharmacy, Set=NPC | NPC bank not loaded yet | Admin: complete SOP-23 (paste `mcqs-npc.csv` into MCQs sheet) |
+| Set filter (NPC) does not narrow questions | Old cached question data (pre-fix) | Refresh page / clear 5-min cache; the Set filter now matches `college` too |
+| Duplicate NPC questions after re-paste | CSV pasted twice | Delete duplicate rows (QNumber 1–100 per NPC) or clear and re-paste |
 
 ---
 
@@ -535,6 +569,7 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 | 1.0 | 2026-11-27 | CPREC Nepal | Initial SOP based on `index.html` workflow |
 | 2.0 | 2026-11-27 | CPREC Nepal | Added backend (`Code.gs`): admin approval flow, user/MCQ management, Drive avatars, referrals, sheet schema, deployment SOP |
 | 3.0 | 2026-11-27 | CPREC Nepal | Added Admin UI + referral/history wiring in `index.html`; backend: `getHistory`, referral auto-credit on approval, pending-aware `sendCode` |
+| 3.1 | 2026-11-27 | CPREC Nepal | Added SOP-23 (admin: load NPC bank from GitHub) and SOP-24 (candidate: take NPC exam); Set filter now matches `college` (live) as well as `level` (demo); NPC troubleshooting rows |
 
 ---
 
