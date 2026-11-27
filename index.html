@@ -188,7 +188,7 @@
     select.input-field option[value=""] { color: var(--fg-muted); }
   </style>
 </head>
-<body>
+<body class="light-mode">
   <div class="mesh-gradient"></div>
   <div id="toast-container" class="toast-container"></div>
 
@@ -208,9 +208,6 @@
           <img id="header-avatar" src="https://ui-avatars.com/api/?name=U&background=random" class="w-6 h-6 rounded-full object-cover" />
           <span class="text-sm font-medium text-[var(--accent)] max-w-[100px] truncate" id="user-email-display">User</span>
         </div>
-        <button id="theme-toggle" class="w-10 h-10 rounded-xl bg-[rgba(255,255,255,0.05)] flex items-center justify-center text-[var(--fg-muted)] hover:text-[var(--accent)] transition-colors" aria-label="Toggle theme">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-        </button>
       </div>
     </div>
   </header>
@@ -620,9 +617,6 @@
        }
     };
 
-    // --- Theme ---
-    $('theme-toggle').onclick = () => document.body.classList.toggle('light-mode');
-    
     // --- Nav ---
     const showStep = (id) => {
        ['step-auth', 'step-dashboard', 'step-quiz', 'step-results'].forEach(s => $(s).classList.toggle('hidden', s !== id));

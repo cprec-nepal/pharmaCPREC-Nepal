@@ -220,7 +220,7 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
    - **Dashboard / Overview** (`panel-overview`) — Stats: Quizzes taken, Average Score, Referrals.
    - **Settings** (`panel-settings`) — Profile & referral management (SOP-09, SOP-10).
    - **History** (`panel-history`) — Past attempts (SOP-11).
-2. **Header:** User badge (avatar + name) — click to jump to Settings. Theme toggle (dark/light) at top-right.
+2. **Header:** User badge (avatar + name) — click to jump to Settings. App is light-mode only (no theme toggle).
 3. **Quiz Setup** section is always visible in the sidebar (SOP-06).
 
 ---
@@ -326,10 +326,11 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 
 ---
 
-### SOP-13 — Theme Toggle (Optional)
+### SOP-13 — Theme (Light Only)
 
-- Click moon/sun icon in header (`theme-toggle`) to switch between dark (default) and light mode.
-- Preference is visual only; does not affect data or workflow.
+- The app is **light mode only**. The dark/light toggle has been removed.
+- `<body class="light-mode">` is hardcoded in `index.html`; no user action can switch themes.
+- To re-enable dark mode in future, restore the `theme-toggle` button + JS handler (see git history).
 
 ---
 
