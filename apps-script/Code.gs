@@ -10,12 +10,19 @@
  * MUST be "Subject" (separate from "College Name"), otherwise every field is
  * shifted by one and the quiz renders garbage.
  *
- * MCQs tab (row 1 = headers, data from row 2):
- *   A: Subject        B: College Name   C: QNumber
- *   D: Question       E: Option A       F: Option B
- *   G: Option C       H: Option D       I: Correct Answer
- *   J: Image URL      K: Explanation    L: Correct Text
- *   M: Feedback A     N: Feedback B     O: Feedback C     P: Feedback D
+ * MCQs tab (row 1 = headers, data from row 2) — column ORDER is what matters:
+ *   A: Subject        B: College Name     C: QNumber
+ *   D: Question       E: Option A         F: Option B
+ *   G: Option C       H: Option D         I: Correct Answer
+ *   J: Image URL      K: Explanation*     L: Correct Text*
+ *   M: Feedback A     N: Feedback B       O: Feedback C       P: Feedback D
+ *   (* backend reads column K as `explanation`, L as `correctText`; the sheet
+ *      header names are flexible — only the position/index matters.)
+ *
+ * Backend column mapping (r[N] = 0-based column index):
+ *   r[0]=subject, r[1]=college, r[2]=qnumber, r[3]=q,
+ *   r[4..7]=options A–D, r[8]=answer, r[9]=image,
+ *   r[10]=explanation, r[11]=correctText, r[12..15]=feedback A–D
  *
  * EmailVerifications tab: column 0 MUST be "Email" (then Code, Status, ...).
  * (See the header comment block inside handleRequest() for the full
