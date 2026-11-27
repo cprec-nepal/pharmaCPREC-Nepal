@@ -297,10 +297,10 @@
              </div>
 
              <div class="space-y-1.5">
-                <label for="filter-level" class="block px-1 text-xs font-medium text-[var(--fg-muted)]">Set</label>
+                <label for="filter-level" class="block px-1 text-xs font-medium text-[var(--fg-muted)]">College</label>
                 <div class="select-wrap">
                    <svg class="select-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2l9 5-9 5-9-5 9-5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9 5 9-5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 17l9 5 9-5"/></svg>
-                   <select id="filter-level" class="input-field text-sm"><option value="">All Sets</option></select>
+                   <select id="filter-level" class="input-field text-sm"><option value="">All Colleges</option></select>
                 </div>
              </div>
 
@@ -479,18 +479,18 @@
         referralCode: 'DEMO123'
       },
       mcqs: [
-        { q: 'Which organ is primarily responsible for drug metabolism?', options: ['Liver','Kidney','Heart','Lungs'], answer: 'A', subject: 'Pharmacy', level: 'Set 1' },
-        { q: 'In a prescription, what does "BID" mean?', options: ['Twice a day','Once a day','As needed','At bedtime'], answer: 'A', subject: 'Pharmacy', level: 'Set 1' },
-        { q: 'Which drug class is most commonly used to lower LDL cholesterol?', options: ['Statins','Beta-blockers','Diuretics','NSAIDs'], answer: 'A', subject: 'Pharmacy', level: 'Set 2' },
-        { q: "A drug's therapeutic index refers to the:", options: ['Ratio of toxic to effective dose','Half-life','Bioavailability','Clearance'], answer: 'A', subject: 'Pharmacy', level: 'Set 2' },
-        { q: 'Which enzyme metabolizes warfarin and is affected by many interactions?', options: ['CYP2C9','CYP3A4','CYP1A2','CYP2D6'], answer: 'A', subject: 'Pharmacy', level: 'Set 3' },
-        { q: 'A normal adult resting heart rate is roughly:', options: ['60–100 bpm','40–60 bpm','100–120 bpm','120–140 bpm'], answer: 'A', subject: 'Nursing', level: 'Set 1' },
-        { q: 'Which vital sign most directly suggests infection?', options: ['Temperature','Weight','Height','Vision'], answer: 'A', subject: 'Nursing', level: 'Set 1' },
-        { q: 'The "5 rights" of medication administration do NOT include:', options: ['Right price','Right patient','Right dose','Right route'], answer: 'A', subject: 'Nursing', level: 'Set 2' },
-        { q: 'Hand hygiene is most effective at preventing:', options: ['Transmission of pathogens','Cancer','Diabetes','Asthma'], answer: 'A', subject: 'Public Health', level: 'Set 1' },
-        { q: 'Which vaccine is routinely given at birth in Nepal?', options: ['BCG','MMR','HPV','Influenza'], answer: 'A', subject: 'Public Health', level: 'Set 2' },
-        { q: 'A BMI of 28 is classified as:', options: ['Overweight','Underweight','Normal','Obese'], answer: 'A', subject: 'Public Health', level: 'Set 2' },
-        { q: 'Which blood cells are primarily responsible for immunity?', options: ['White blood cells','Red blood cells','Platelets','Plasma'], answer: 'A', subject: 'Biology', level: 'Set 1' }
+        { q: 'Which organ is primarily responsible for drug metabolism?', options: ['Liver','Kidney','Heart','Lungs'], answer: 'A', subject: 'Pharmacy', college: 'Set 1' },
+        { q: 'In a prescription, what does "BID" mean?', options: ['Twice a day','Once a day','As needed','At bedtime'], answer: 'A', subject: 'Pharmacy', college: 'Set 1' },
+        { q: 'Which drug class is most commonly used to lower LDL cholesterol?', options: ['Statins','Beta-blockers','Diuretics','NSAIDs'], answer: 'A', subject: 'Pharmacy', college: 'Set 2' },
+        { q: "A drug's therapeutic index refers to the:", options: ['Ratio of toxic to effective dose','Half-life','Bioavailability','Clearance'], answer: 'A', subject: 'Pharmacy', college: 'Set 2' },
+        { q: 'Which enzyme metabolizes warfarin and is affected by many interactions?', options: ['CYP2C9','CYP3A4','CYP1A2','CYP2D6'], answer: 'A', subject: 'Pharmacy', college: 'Set 3' },
+        { q: 'A normal adult resting heart rate is roughly:', options: ['60–100 bpm','40–60 bpm','100–120 bpm','120–140 bpm'], answer: 'A', subject: 'Nursing', college: 'Set 1' },
+        { q: 'Which vital sign most directly suggests infection?', options: ['Temperature','Weight','Height','Vision'], answer: 'A', subject: 'Nursing', college: 'Set 1' },
+        { q: 'The "5 rights" of medication administration do NOT include:', options: ['Right price','Right patient','Right dose','Right route'], answer: 'A', subject: 'Nursing', college: 'Set 2' },
+        { q: 'Hand hygiene is most effective at preventing:', options: ['Transmission of pathogens','Cancer','Diabetes','Asthma'], answer: 'A', subject: 'Public Health', college: 'Set 1' },
+        { q: 'Which vaccine is routinely given at birth in Nepal?', options: ['BCG','MMR','HPV','Influenza'], answer: 'A', subject: 'Public Health', college: 'Set 2' },
+        { q: 'A BMI of 28 is classified as:', options: ['Overweight','Underweight','Normal','Obese'], answer: 'A', subject: 'Public Health', college: 'Set 2' },
+        { q: 'Which blood cells are primarily responsible for immunity?', options: ['White blood cells','Red blood cells','Platelets','Plasma'], answer: 'A', subject: 'Biology', college: 'Set 1' }
       ]
     };
 
@@ -669,7 +669,7 @@
        const fRes = await api({ type: 'getFilters' });
        if(fRes.success) {
           $('filter-faculty').innerHTML = '<option value="">All Faculties</option>' + fRes.subjects.map(s => `<option value="${s}">${s}</option>`).join('');
-          $('filter-level').innerHTML = '<option value="">All Sets</option>' + fRes.colleges.map(c => `<option value="${c}">${c}</option>`).join('');
+          $('filter-level').innerHTML = '<option value="">All Colleges</option>' + fRes.colleges.map(c => `<option value="${c}">${c}</option>`).join('');
        } else {
           populateFilters();
        }
@@ -680,9 +680,9 @@
     // Derive faculty/level filters directly from the loaded questions
     const populateFilters = () => {
        const faculties = [...new Set(state.mcqs.map(q => q.subject).filter(Boolean))].sort();
-       const levels = [...new Set(state.mcqs.map(q => q.level).filter(Boolean))].sort();
+       const levels = [...new Set(state.mcqs.map(q => q.college).filter(Boolean))].sort();
        $('filter-faculty').innerHTML = '<option value="">All Faculties</option>' + faculties.map(s => `<option value="${s}">${s}</option>`).join('');
-       $('filter-level').innerHTML = '<option value="">All Sets</option>' + levels.map(l => `<option value="${l}">${l}</option>`).join('');
+       $('filter-level').innerHTML = '<option value="">All Colleges</option>' + levels.map(l => `<option value="${l}">${l}</option>`).join('');
     };
 
     const updateUI = () => {
@@ -786,9 +786,9 @@
        const f = $('filter-faculty').value;
        const l = $('filter-level').value;
        if(f) list = list.filter(q => q.subject === f);
-       // Only apply the level filter when questions actually carry a `level`
-       // (the live backend may not), so we never break the real flow.
-       if(l && state.mcqs.some(q => q.level)) list = list.filter(q => q.level === l);
+       // Apply the College filter. Real MCQs carry a `college` field (MCQ sheet col 1);
+       // guard so a missing field can never break the flow.
+       if(l && state.mcqs.some(q => q.college)) list = list.filter(q => q.college === l);
        list = shuffle(list).slice(0, 10);
        
        if(!list.length) return toast("No questions found", "error");
@@ -816,16 +816,25 @@
        const ans = state.quiz.answers[state.quiz.index];
        const isAns = ans !== undefined;
        
-       let html = `<h3 class="text-xl font-semibold mb-6">${q.q}</h3><div class="space-y-3">`;
+       let html = `<h3 class="text-xl font-semibold mb-4">${q.q}</h3>`;
+       if(q.image && /^https?:\/\//.test(q.image)) {
+          html += `<img src="${q.image}" alt="Question image" class="mb-4 max-h-64 w-auto rounded-xl border border-[color:var(--card-border)] object-contain" />`;
+       }
+       html += `<div class="space-y-3">`;
        ['A','B','C','D'].forEach(l => {
-          const opt = q.options[['A','B','C','D'].indexOf(l)];
+          const idx = ['A','B','C','D'].indexOf(l);
+          const opt = q.options[idx];
+          const fb = (q.feedback && q.feedback[l]) || '';
           const sel = ans === l;
           const cor = q.answer === l;
           let cls = "option-card";
           if(isAns) { cls += " disabled"; if(cor) cls += " correct"; if(sel && !cor) cls += " wrong"; }
-          html += `<div class="${cls}" data-val="${l}"><div class="option-marker">${l}</div><div>${opt}</div></div>`;
+          html += `<div class="${cls}" data-val="${l}"><div class="option-marker">${l}</div><div class="flex-1 min-w-0"><div>${opt}</div>${isAns && fb ? `<div class="text-xs mt-1 ${cor ? 'text-[var(--success)]' : 'text-[var(--fg-muted)]'}">${fb}</div>` : ''}</div></div>`;
        });
        html += `</div>`;
+       if(isAns && q.explanation) {
+          html += `<div class="mt-4 p-3 rounded-xl bg-[rgba(16,185,129,0.08)] border border-[color:var(--card-border)] text-sm"><span class="font-semibold text-[var(--accent)]">Explanation: </span><span class="text-[var(--fg-muted)]">${q.explanation}</span></div>`;
+       }
        
        $('quiz-area').innerHTML = html;
        if(!isAns) {
@@ -859,7 +868,7 @@
        const score = state.quiz.score;
        const percent = Math.round((score/total)*100);
        if(!state.demo) {
-          await api({ type: 'saveScore', email: state.email, subject: $('filter-faculty').value || 'General', college: 'Web', score, total, percentage: percent });
+          await api({ type: 'saveScore', email: state.email, subject: $('filter-faculty').value || 'General', college: $('filter-level').value || 'General', score, total, percentage: percent });
        }
        $('res-score').innerText = `${score}/${total} (${percent}%)`;
        showStep('step-results');
