@@ -170,6 +170,21 @@
     .hidden { display: none !important; }
     .light-mode .input-field { background: rgba(0,0,0,0.02); }
     select.input-field { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1rem; padding-right: 2.5rem; }
+
+    /* Filter dropdowns (Faculty / Set) */
+    .select-wrap { position: relative; }
+    .select-wrap .select-icon {
+      position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%);
+      width: 1.05rem; height: 1.05rem; color: var(--fg-muted); pointer-events: none;
+    }
+    .select-wrap select.input-field {
+      padding-left: 2.5rem; cursor: pointer;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .select-wrap select.input-field:hover:not(:disabled) { border-color: var(--accent); }
+    .select-wrap select.input-field:disabled { opacity: 0.6; cursor: not-allowed; }
+    /* De-emphasise the placeholder option */
+    select.input-field option[value=""] { color: var(--fg-muted); }
   </style>
 </head>
 <body>
@@ -267,11 +282,29 @@
             </button>
           </div>
           
-          <div class="pt-4 border-t border-[var(--card-border)] space-y-3">
-             <h4 class="px-4 text-xs font-bold uppercase text-[var(--fg-muted)]">Quiz Setup</h4>
-             <select id="filter-faculty" class="input-field text-sm"><option value="">Faculty</option></select>
-             <select id="filter-level" class="input-field text-sm"><option value="">Level</option></select>
-             <button id="btn-start-quiz" class="btn btn-primary w-full" disabled>Start Quiz</button>
+          <div class="pt-4 border-t border-[var(--card-border)] space-y-4">
+             <div class="flex items-center justify-between px-1">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-[var(--fg-muted)]">Quiz Setup</h4>
+                <button id="btn-reset-filters" class="text-[11px] font-semibold text-[var(--accent)] hover:opacity-80 transition-opacity" style="display:none">Reset</button>
+             </div>
+
+             <div class="space-y-1.5">
+                <label for="filter-faculty" class="block px-1 text-xs font-medium text-[var(--fg-muted)]">Faculty</label>
+                <div class="select-wrap">
+                   <svg class="select-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9l9-5 9 5-9 5-9-5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11v4c0 1.1 2.5 2.5 5 2.5s5-1.4 5-2.5v-4"/></svg>
+                   <select id="filter-faculty" class="input-field text-sm"><option value="">All Faculties</option></select>
+                </div>
+             </div>
+
+             <div class="space-y-1.5">
+                <label for="filter-level" class="block px-1 text-xs font-medium text-[var(--fg-muted)]">Set</label>
+                <div class="select-wrap">
+                   <svg class="select-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2l9 5-9 5-9-5 9-5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l9 5 9-5"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 17l9 5 9-5"/></svg>
+                   <select id="filter-level" class="input-field text-sm"><option value="">All Sets</option></select>
+                </div>
+             </div>
+
+             <button id="btn-start-quiz" class="btn btn-primary w-full mt-1" disabled>Start Quiz</button>
           </div>
           
           <button id="btn-logout" class="w-full text-left px-4 py-2.5 rounded-xl hover:bg-red-500 hover:bg-opacity-10 flex items-center gap-3 text-red-400 transition-colors text-sm mt-4">
@@ -442,18 +475,18 @@
         referralCode: 'DEMO123'
       },
       mcqs: [
-        { q: 'Which organ is primarily responsible for drug metabolism?', options: ['Liver','Kidney','Heart','Lungs'], answer: 'A', subject: 'Pharmacy', level: 'Level 1' },
-        { q: 'In a prescription, what does "BID" mean?', options: ['Twice a day','Once a day','As needed','At bedtime'], answer: 'A', subject: 'Pharmacy', level: 'Level 1' },
-        { q: 'Which drug class is most commonly used to lower LDL cholesterol?', options: ['Statins','Beta-blockers','Diuretics','NSAIDs'], answer: 'A', subject: 'Pharmacy', level: 'Level 2' },
-        { q: "A drug's therapeutic index refers to the:", options: ['Ratio of toxic to effective dose','Half-life','Bioavailability','Clearance'], answer: 'A', subject: 'Pharmacy', level: 'Level 2' },
-        { q: 'Which enzyme metabolizes warfarin and is affected by many interactions?', options: ['CYP2C9','CYP3A4','CYP1A2','CYP2D6'], answer: 'A', subject: 'Pharmacy', level: 'Level 3' },
-        { q: 'A normal adult resting heart rate is roughly:', options: ['60–100 bpm','40–60 bpm','100–120 bpm','120–140 bpm'], answer: 'A', subject: 'Nursing', level: 'Level 1' },
-        { q: 'Which vital sign most directly suggests infection?', options: ['Temperature','Weight','Height','Vision'], answer: 'A', subject: 'Nursing', level: 'Level 1' },
-        { q: 'The "5 rights" of medication administration do NOT include:', options: ['Right price','Right patient','Right dose','Right route'], answer: 'A', subject: 'Nursing', level: 'Level 2' },
-        { q: 'Hand hygiene is most effective at preventing:', options: ['Transmission of pathogens','Cancer','Diabetes','Asthma'], answer: 'A', subject: 'Public Health', level: 'Level 1' },
-        { q: 'Which vaccine is routinely given at birth in Nepal?', options: ['BCG','MMR','HPV','Influenza'], answer: 'A', subject: 'Public Health', level: 'Level 2' },
-        { q: 'A BMI of 28 is classified as:', options: ['Overweight','Underweight','Normal','Obese'], answer: 'A', subject: 'Public Health', level: 'Level 2' },
-        { q: 'Which blood cells are primarily responsible for immunity?', options: ['White blood cells','Red blood cells','Platelets','Plasma'], answer: 'A', subject: 'Biology', level: 'Level 1' }
+        { q: 'Which organ is primarily responsible for drug metabolism?', options: ['Liver','Kidney','Heart','Lungs'], answer: 'A', subject: 'Pharmacy', level: 'Set 1' },
+        { q: 'In a prescription, what does "BID" mean?', options: ['Twice a day','Once a day','As needed','At bedtime'], answer: 'A', subject: 'Pharmacy', level: 'Set 1' },
+        { q: 'Which drug class is most commonly used to lower LDL cholesterol?', options: ['Statins','Beta-blockers','Diuretics','NSAIDs'], answer: 'A', subject: 'Pharmacy', level: 'Set 2' },
+        { q: "A drug's therapeutic index refers to the:", options: ['Ratio of toxic to effective dose','Half-life','Bioavailability','Clearance'], answer: 'A', subject: 'Pharmacy', level: 'Set 2' },
+        { q: 'Which enzyme metabolizes warfarin and is affected by many interactions?', options: ['CYP2C9','CYP3A4','CYP1A2','CYP2D6'], answer: 'A', subject: 'Pharmacy', level: 'Set 3' },
+        { q: 'A normal adult resting heart rate is roughly:', options: ['60–100 bpm','40–60 bpm','100–120 bpm','120–140 bpm'], answer: 'A', subject: 'Nursing', level: 'Set 1' },
+        { q: 'Which vital sign most directly suggests infection?', options: ['Temperature','Weight','Height','Vision'], answer: 'A', subject: 'Nursing', level: 'Set 1' },
+        { q: 'The "5 rights" of medication administration do NOT include:', options: ['Right price','Right patient','Right dose','Right route'], answer: 'A', subject: 'Nursing', level: 'Set 2' },
+        { q: 'Hand hygiene is most effective at preventing:', options: ['Transmission of pathogens','Cancer','Diabetes','Asthma'], answer: 'A', subject: 'Public Health', level: 'Set 1' },
+        { q: 'Which vaccine is routinely given at birth in Nepal?', options: ['BCG','MMR','HPV','Influenza'], answer: 'A', subject: 'Public Health', level: 'Set 2' },
+        { q: 'A BMI of 28 is classified as:', options: ['Overweight','Underweight','Normal','Obese'], answer: 'A', subject: 'Public Health', level: 'Set 2' },
+        { q: 'Which blood cells are primarily responsible for immunity?', options: ['White blood cells','Red blood cells','Platelets','Plasma'], answer: 'A', subject: 'Biology', level: 'Set 1' }
       ]
     };
 
@@ -604,6 +637,7 @@
           updateUI();
           populateFilters();
           $('btn-start-quiz').disabled = false;
+          syncResetBtn();
           toast("Demo mode — sample questions loaded", "info");
           return;
        }
@@ -630,20 +664,21 @@
        // Filters
        const fRes = await api({ type: 'getFilters' });
        if(fRes.success) {
-          $('filter-faculty').innerHTML = '<option value="">All</option>' + fRes.subjects.map(s => `<option value="${s}">${s}</option>`).join('');
-          $('filter-level').innerHTML = '<option value="">All</option>' + fRes.colleges.map(c => `<option value="${c}">${c}</option>`).join('');
+          $('filter-faculty').innerHTML = '<option value="">All Faculties</option>' + fRes.subjects.map(s => `<option value="${s}">${s}</option>`).join('');
+          $('filter-level').innerHTML = '<option value="">All Sets</option>' + fRes.colleges.map(c => `<option value="${c}">${c}</option>`).join('');
        } else {
           populateFilters();
        }
        $('btn-start-quiz').disabled = false;
+       syncResetBtn();
     };
 
     // Derive faculty/level filters directly from the loaded questions
     const populateFilters = () => {
        const faculties = [...new Set(state.mcqs.map(q => q.subject).filter(Boolean))].sort();
        const levels = [...new Set(state.mcqs.map(q => q.level).filter(Boolean))].sort();
-       $('filter-faculty').innerHTML = '<option value="">All</option>' + faculties.map(s => `<option value="${s}">${s}</option>`).join('');
-       $('filter-level').innerHTML = '<option value="">All</option>' + levels.map(l => `<option value="${l}">${l}</option>`).join('');
+       $('filter-faculty').innerHTML = '<option value="">All Faculties</option>' + faculties.map(s => `<option value="${s}">${s}</option>`).join('');
+       $('filter-level').innerHTML = '<option value="">All Sets</option>' + levels.map(l => `<option value="${l}">${l}</option>`).join('');
     };
 
     const updateUI = () => {
@@ -757,6 +792,19 @@
        state.quiz = { index: 0, data: list, answers: {}, score: 0 };
        showStep('step-quiz');
        renderQ();
+    };
+
+    // Filter reset + show/hide the Reset affordance
+    const syncResetBtn = () => {
+       const active = $('filter-faculty').value || $('filter-level').value;
+       $('btn-reset-filters').style.display = active ? 'block' : 'none';
+    };
+    $('filter-faculty').addEventListener('change', syncResetBtn);
+    $('filter-level').addEventListener('change', syncResetBtn);
+    $('btn-reset-filters').onclick = () => {
+       $('filter-faculty').value = '';
+       $('filter-level').value = '';
+       syncResetBtn();
     };
 
     const renderQ = () => {
