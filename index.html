@@ -6,23 +6,14 @@
   <title>MCQ Master | CPREC Nepal</title>
   <link rel="icon" type="image/png" href="logo.png" />
   
-  <!-- Fonts & Tailwind -->
+  <!-- Fonts (display=swap = non-blocking text) & preconnects for faster API/avatar loads -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://script.google.com">
+  <link rel="preconnect" href="https://ui-avatars.com">
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            display: ['Space Grotesk', 'sans-serif'],
-            body: ['Inter', 'sans-serif'],
-          },
-        }
-      }
-    }
-  </script>
+  <!-- Tailwind: pre-compiled static CSS (was CDN JIT — rebuild via: npx tailwindcss -i input.css -o tailwind.css --minify) -->
+  <link rel="stylesheet" href="tailwind.css" />
   
   <style>
     :root {
@@ -323,7 +314,10 @@
           
           <!-- Panel: Overview -->
           <div id="panel-overview" class="glass-card p-6">
-             <h3 class="font-display font-semibold text-xl mb-6">Dashboard</h3>
+             <div class="flex items-center justify-between mb-6">
+               <h3 class="font-display font-semibold text-xl">Dashboard</h3>
+               <span id="dash-loading" class="hidden text-xs text-[var(--fg-muted)]">Loading…</span>
+             </div>
              <div class="grid sm:grid-cols-3 gap-4">
                <div class="p-5 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[color:var(--card-border)]">
                  <div id="stat-quizzes" class="text-3xl font-bold text-[var(--accent)]">0</div>
@@ -617,6 +611,24 @@
        }
     };
 
+    // --- Fast-load cache: MCQs + filters cached 5 min (stale-while-revalidate) ---
+    const CACHE_TTL = 5 * 60 * 1000;
+    const cacheGet = (key) => {
+       try {
+          const raw = localStorage.getItem('mcq_cache_' + key);
+          if (!raw) return null;
+          const { ts, data } = JSON.parse(raw);
+          if (Date.now() - ts > CACHE_TTL) return null;
+          return data;
+       } catch(e) { return null; }
+    };
+    const cacheSet = (key, data) => {
+       try { localStorage.setItem('mcq_cache_' + key, JSON.stringify({ ts: Date.now(), data })); } catch(e) {}
+    };
+    const cacheClear = () => {
+       ['mcqs', 'filters'].forEach(k => localStorage.removeItem('mcq_cache_' + k));
+    };
+
     // --- Nav ---
     const showStep = (id) => {
        ['step-auth', 'step-dashboard', 'step-quiz', 'step-results'].forEach(s => $(s).classList.toggle('hidden', s !== id));
@@ -769,36 +781,63 @@
           return;
        }
        
-       // Load Profile
-       const pRes = await api({ type: 'getProfile', email: state.email, token: state.token });
+       // Fast path: use fresh cache instantly, refresh in background
+       const cachedMcqs = cacheGet('mcqs');
+       const cachedFilters = cacheGet('filters');
+       if (cachedMcqs && cachedMcqs.length) {
+          state.mcqs = cachedMcqs;
+          updateUI();
+          if (cachedFilters) {
+             $('filter-faculty').innerHTML = '<option value="">All Faculties</option>' + cachedFilters.subjects.map(s => `<option value="${s}">${s}</option>`).join('');
+             $('filter-level').innerHTML = '<option value="">All Sets</option>' + cachedFilters.colleges.map(c => `<option value="${c}">${c}</option>`).join('');
+          } else {
+             populateFilters();
+          }
+          $('btn-start-quiz').disabled = false;
+          syncResetBtn();
+       }
+       $('dash-loading').classList.remove('hidden');
+
+       // Load everything IN PARALLEL (was sequential — 4-5x slower)
+       const [pRes, mRes, fRes, hRes] = await Promise.all([
+          api({ type: 'getProfile', email: state.email, token: state.token }),
+          cachedMcqs ? Promise.resolve({ success: true, mcqs: cachedMcqs, cached: true }) : api({ type: 'getMCQs' }),
+          cachedFilters ? Promise.resolve({ success: true, subjects: cachedFilters.subjects, colleges: cachedFilters.colleges, cached: true }) : api({ type: 'getFilters' }),
+          api({ type: 'getHistory', email: state.email, token: state.token })
+       ]);
+
        if(pRes.success) {
           state.profile = pRes.profile;
-          updateUI();
        } else {
           state.profile = { email: state.email, fullName: state.email.split('@')[0] };
-          updateUI();
        }
-       
-       // Load MCQs (fall back to the sample set if the API is unreachable)
-       const mRes = await api({ type: 'getMCQs' });
+       updateUI();
+
        if(mRes.success && Array.isArray(mRes.mcqs) && mRes.mcqs.length) {
           state.mcqs = mRes.mcqs;
-       } else {
+          if (!mRes.cached) cacheSet('mcqs', mRes.mcqs);
+       } else if (!cachedMcqs) {
           state.mcqs = DEMO.mcqs;
           toast("Couldn't load questions — using sample set", "error");
        }
-       
-       // Filters
-       const fRes = await api({ type: 'getFilters' });
+
        if(fRes.success) {
           $('filter-faculty').innerHTML = '<option value="">All Faculties</option>' + fRes.subjects.map(s => `<option value="${s}">${s}</option>`).join('');
           $('filter-level').innerHTML = '<option value="">All Sets</option>' + fRes.colleges.map(c => `<option value="${c}">${c}</option>`).join('');
-       } else {
+          if (!fRes.cached) cacheSet('filters', { subjects: fRes.subjects, colleges: fRes.colleges });
+       } else if (!cachedFilters) {
           populateFilters();
        }
+
+       if(hRes.success && Array.isArray(hRes.history)) {
+          state.history = hRes.history;
+          renderHistory();
+          updateStats();
+       }
+
        $('btn-start-quiz').disabled = false;
        syncResetBtn();
-       await loadHistory();
+       $('dash-loading').classList.add('hidden');
        if (state.isAdmin) loadAdminData();
     };
 
@@ -1053,6 +1092,7 @@
        toast(res.message, res.success ? 'success' : 'error');
        if (res.success) {
           ['mcq-subject','mcq-college','mcq-qnumber','mcq-question','mcq-optA','mcq-optB','mcq-optC','mcq-optD','mcq-image','mcq-correctText','mcq-explanation','mcq-fbA','mcq-fbB','mcq-fbC','mcq-fbD'].forEach(id => $(id).value = '');
+          cacheClear();
           initDashboard();
        }
     };
@@ -1063,7 +1103,7 @@
        if (!confirm(`Delete MCQ ${qnumber}?`)) return;
        const res = await api({ type: 'deleteMCQ', email: state.email, token: state.token, qnumber });
        toast(res.message, res.success ? 'success' : 'error');
-       if (res.success) { $('del-qnumber').value = ''; initDashboard(); }
+       if (res.success) { $('del-qnumber').value = ''; cacheClear(); initDashboard(); }
     };
 
     $('btn-add-admin').onclick = async () => {
