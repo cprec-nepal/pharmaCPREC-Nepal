@@ -226,6 +226,10 @@
           </div>
           <h2 class="font-display font-bold text-3xl mb-2">Welcome</h2>
           <p class="text-[var(--fg-muted)] mb-8">Login or Register to continue.</p>
+          <div id="auth-pending-msg" class="hidden mb-6 p-4 rounded-xl bg-[rgba(245,158,11,0.1)] border border-amber-500/30 text-left">
+            <p class="text-sm font-semibold text-amber-400">⏳ Registration pending approval</p>
+            <p class="text-xs text-[var(--fg-muted)] mt-1">Your request has been sent to the Admin. You will receive an approval email with your password and verification code. Please check your inbox (and spam folder).</p>
+          </div>
           
           <div class="space-y-4">
             <input type="email" id="auth-email" class="input-field" placeholder="Enter your email" />
@@ -280,6 +284,11 @@
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               History
             </button>
+            <button id="btn-nav-admin" onclick="showPanel('panel-admin')" class="hidden w-full text-left px-4 py-2.5 rounded-xl hover:bg-[rgba(255,255,255,0.05)] flex items-center gap-3 text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+              Admin
+              <span id="admin-pending-badge" class="hidden ml-auto px-2 py-0.5 rounded-full bg-amber-500 text-white text-[11px] font-bold">0</span>
+            </button>
           </div>
           
           <div class="pt-4 border-t border-[color:var(--card-border)] space-y-4">
@@ -321,15 +330,15 @@
              <h3 class="font-display font-semibold text-xl mb-6">Dashboard</h3>
              <div class="grid sm:grid-cols-3 gap-4">
                <div class="p-5 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[color:var(--card-border)]">
-                 <div class="text-3xl font-bold text-[var(--accent)]">0</div>
+                 <div id="stat-quizzes" class="text-3xl font-bold text-[var(--accent)]">0</div>
                  <div class="text-xs text-[var(--fg-muted)] mt-1">Quizzes</div>
                </div>
                <div class="p-5 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[color:var(--card-border)]">
-                 <div class="text-3xl font-bold text-[var(--accent)]">0%</div>
+                 <div id="stat-avg" class="text-3xl font-bold text-[var(--accent)]">0%</div>
                  <div class="text-xs text-[var(--fg-muted)] mt-1">Avg Score</div>
                </div>
                 <div class="p-5 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[color:var(--card-border)]">
-                 <div class="text-3xl font-bold text-[var(--accent)]">0</div>
+                 <div id="stat-referrals" class="text-3xl font-bold text-[var(--accent)]">0</div>
                  <div class="text-xs text-[var(--fg-muted)] mt-1">Referrals</div>
                </div>
              </div>
@@ -389,6 +398,16 @@
                </div>
             </div>
 
+            <!-- Apply Referral Section -->
+            <div class="mt-10 p-6 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[color:var(--card-border)]">
+               <h4 class="font-semibold mb-1">Apply a Referral Code</h4>
+               <p class="text-xs text-[var(--fg-muted)] mb-4">Have a friend's code? Enter it here to credit them.</p>
+               <div class="flex flex-col sm:flex-row gap-3">
+                  <input type="text" id="apply-referral-code" class="input-field flex-1" placeholder="Enter referral code" />
+                  <button id="btn-apply-referral" class="btn btn-secondary">Apply</button>
+               </div>
+            </div>
+
             <!-- Referral Section -->
             <div class="mt-10 p-6 rounded-xl bg-[rgba(16,185,129,0.05)] border border-[color:var(--accent)] border-opacity-20">
                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -408,8 +427,87 @@
 
           <!-- Panel: History -->
           <div id="panel-history" class="glass-card p-6 hidden">
-            <h3 class="font-display font-semibold text-xl mb-6">History</h3>
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="font-display font-semibold text-xl">History</h3>
+              <button id="btn-refresh-history" class="btn btn-secondary py-2 px-3 text-xs">Refresh</button>
+            </div>
             <div id="history-list" class="space-y-3 text-sm">No history found.</div>
+          </div>
+
+          <!-- Panel: Admin -->
+          <div id="panel-admin" class="glass-card p-6 hidden">
+            <div class="flex items-center justify-between mb-6">
+              <h3 class="font-display font-semibold text-xl">Admin Panel</h3>
+              <button id="btn-refresh-admin" class="btn btn-secondary py-2 px-3 text-xs">Refresh All</button>
+            </div>
+
+            <!-- Pending Approvals -->
+            <div class="mb-8">
+              <h4 class="font-semibold text-sm mb-3">Pending Approvals</h4>
+              <div id="admin-pending-list" class="space-y-3 text-sm">Loading…</div>
+            </div>
+
+            <!-- Users -->
+            <div class="mb-8 pt-6 border-t border-[color:var(--card-border)]">
+              <h4 class="font-semibold text-sm mb-3">Users</h4>
+              <div id="admin-users-list" class="space-y-3 text-sm">Loading…</div>
+            </div>
+
+            <!-- Add MCQ -->
+            <div class="mb-8 pt-6 border-t border-[color:var(--card-border)]">
+              <h4 class="font-semibold text-sm mb-3">Add MCQ</h4>
+              <div class="grid sm:grid-cols-2 gap-3">
+                <input type="text" id="mcq-subject" class="input-field" placeholder="Subject / Faculty" />
+                <input type="text" id="mcq-college" class="input-field" placeholder="College / Set" />
+                <input type="text" id="mcq-qnumber" class="input-field" placeholder="Q Number" />
+                <select id="mcq-answer" class="input-field">
+                  <option value="A">Answer: A</option><option value="B">Answer: B</option>
+                  <option value="C">Answer: C</option><option value="D">Answer: D</option>
+                </select>
+              </div>
+              <input type="text" id="mcq-question" class="input-field mt-3" placeholder="Question" />
+              <div class="grid sm:grid-cols-2 gap-3 mt-3">
+                <input type="text" id="mcq-optA" class="input-field" placeholder="Option A" />
+                <input type="text" id="mcq-optB" class="input-field" placeholder="Option B" />
+                <input type="text" id="mcq-optC" class="input-field" placeholder="Option C" />
+                <input type="text" id="mcq-optD" class="input-field" placeholder="Option D" />
+              </div>
+              <div class="grid sm:grid-cols-2 gap-3 mt-3">
+                <input type="text" id="mcq-image" class="input-field" placeholder="Image URL (optional)" />
+                <input type="text" id="mcq-correctText" class="input-field" placeholder="Correct text (optional)" />
+              </div>
+              <input type="text" id="mcq-explanation" class="input-field mt-3" placeholder="Explanation (optional)" />
+              <div class="grid sm:grid-cols-4 gap-3 mt-3">
+                <input type="text" id="mcq-fbA" class="input-field" placeholder="Feedback A" />
+                <input type="text" id="mcq-fbB" class="input-field" placeholder="Feedback B" />
+                <input type="text" id="mcq-fbC" class="input-field" placeholder="Feedback C" />
+                <input type="text" id="mcq-fbD" class="input-field" placeholder="Feedback D" />
+              </div>
+              <button id="btn-add-mcq" class="btn btn-primary w-full mt-4">Add MCQ</button>
+            </div>
+
+            <!-- Delete MCQ -->
+            <div class="mb-8 pt-6 border-t border-[color:var(--card-border)]">
+              <h4 class="font-semibold text-sm mb-3">Delete MCQ</h4>
+              <div class="flex gap-3">
+                <input type="text" id="del-qnumber" class="input-field flex-1" placeholder="Q Number to delete" />
+                <button id="btn-delete-mcq" class="btn btn-danger">Delete</button>
+              </div>
+            </div>
+
+            <!-- Add Admin (Super Admin only) -->
+            <div id="admin-create-wrap" class="hidden pt-6 border-t border-[color:var(--card-border)]">
+              <h4 class="font-semibold text-sm mb-3">Create Admin <span class="text-xs text-[var(--fg-muted)]">(Super Admin only)</span></h4>
+              <div class="grid sm:grid-cols-2 gap-3">
+                <input type="text" id="newadmin-email" class="input-field" placeholder="New admin email" />
+                <input type="text" id="newadmin-name" class="input-field" placeholder="Full name" />
+                <select id="newadmin-role" class="input-field">
+                  <option value="Admin">Role: Admin</option><option value="User">Role: User</option>
+                </select>
+                <input type="text" id="newadmin-password" class="input-field" placeholder="Password" />
+              </div>
+              <button id="btn-add-admin" class="btn btn-primary w-full mt-4">Create Admin</button>
+            </div>
           </div>
 
         </div>
@@ -462,11 +560,17 @@
        method: 'otp', // otp | password
        email: '',
        token: '',
+       role: 'User',
+       isAdmin: false,
        demo: false,
        profile: {},
        mcqs: [],
+       history: [],
        quiz: { index: 0, data: [], answers: {}, score: 0 }
     };
+    // Mirrors isSuperAdmin() in Code.gs (backend enforces; this only controls UI visibility)
+    const SUPER_ADMINS = ["admin@cprecnepal.org.np", "manish.pharma0512@gmail.com"];
+    const isSuperAdmin = (email) => SUPER_ADMINS.includes((email || '').toLowerCase());
 
     // Bundled sample data so the app is fully usable without the backend.
     const DEMO = {
@@ -476,7 +580,8 @@
         phone: '+977 9800000000',
         college: 'CPREC Nepal (Demo)',
         avatar: '',
-        referralCode: 'DEMO123'
+        referralCode: 'DEMO123',
+        referralsCount: 0
       },
       mcqs: [
         { q: 'Which organ is primarily responsible for drug metabolism?', options: ['Liver','Kidney','Heart','Lungs'], answer: 'A', subject: 'Pharmacy', level: 'Set 1' },
@@ -524,7 +629,9 @@
        ['step-auth', 'step-dashboard', 'step-quiz', 'step-results'].forEach(s => $(s).classList.toggle('hidden', s !== id));
     };
     const showPanel = (id) => {
-       ['panel-overview', 'panel-settings', 'panel-history'].forEach(p => $(p).classList.toggle('hidden', p !== id));
+       ['panel-overview', 'panel-settings', 'panel-history', 'panel-admin'].forEach(p => $(p).classList.toggle('hidden', p !== id));
+       if (id === 'panel-history') loadHistory();
+       if (id === 'panel-admin') loadAdminData();
     };
 
     // --- Auth UI Logic ---
@@ -565,10 +672,19 @@
        state.email = email; // Store in state for later use
 
        if(state.mode === 'register') {
-          // REGISTER FLOW
+          // REGISTER FLOW (request -> admin approval)
           const ref = $('auth-referral').value.trim();
           const res = await api({ type: 'registerUser', email, referralCode: ref, ip: 'web' });
           toast(res.message, res.success ? 'success' : 'error');
+          if (res.success) {
+             // Show pending banner and switch back to login mode
+             $('auth-pending-msg').classList.remove('hidden');
+             state.mode = 'login';
+             $('referral-input-group').classList.add('hidden');
+             $('btn-toggle-mode').innerText = "New user? Register";
+             $('btn-auth-text').innerText = "Continue with Email";
+             $('auth-password').value = '';
+          }
        
        } else if(state.mode === 'login') {
           
@@ -581,8 +697,11 @@
              
              if(res.success) {
                 state.token = res.token;
+                state.role = res.role || 'User';
+                state.isAdmin = state.role === 'Admin';
                 localStorage.setItem('mcq_token', res.token);
                 localStorage.setItem('mcq_email', res.email);
+                localStorage.setItem('mcq_role', state.role);
                 initDashboard();
                 toast("Welcome back!", "success");
              } else {
@@ -597,6 +716,10 @@
                 $('modal-back').classList.add('flex');
                 toast("Code sent to your email", "success");
              } else {
+                // Pending-approval and not-registered get a friendly hint
+                if ((res.message || '').includes('pending') || (res.message || '').includes('not found')) {
+                   $('auth-pending-msg').classList.remove('hidden');
+                }
                 toast(res.message, 'error');
              }
           }
@@ -609,8 +732,11 @@
        const res = await api({ type: 'verifyCode', email: state.email, code });
        if(res.success) {
           state.token = res.token;
+          state.role = res.role || 'User';
+          state.isAdmin = state.role === 'Admin';
           localStorage.setItem('mcq_token', res.token);
           localStorage.setItem('mcq_email', res.email);
+          localStorage.setItem('mcq_role', state.role);
           $('modal-back').classList.add('hidden');
           initDashboard();
           toast("Welcome back!", "success");
@@ -622,6 +748,8 @@
     // Demo Mode (no backend required)
     $('btn-demo').onclick = () => {
        state.demo = true;
+       state.role = 'User';
+       state.isAdmin = false;
        state.email = DEMO.profile.email;
        state.token = 'demo';
        initDashboard();
@@ -638,7 +766,9 @@
        if(state.demo) {
           state.profile = DEMO.profile;
           state.mcqs = DEMO.mcqs;
+          state.history = [];
           updateUI();
+          renderHistory();
           populateFilters();
           $('btn-start-quiz').disabled = false;
           syncResetBtn();
@@ -675,6 +805,8 @@
        }
        $('btn-start-quiz').disabled = false;
        syncResetBtn();
+       await loadHistory();
+       if (state.isAdmin) loadAdminData();
     };
 
     // Derive faculty/level filters directly from the loaded questions
@@ -700,7 +832,54 @@
        $('settings-email').value = p.email;
        $('settings-college').value = p.college || '';
        $('referral-code-display').innerText = p.referralCode || 'N/A';
+       // Admin visibility
+       $('btn-nav-admin').classList.toggle('hidden', !state.isAdmin);
+       $('admin-create-wrap').classList.toggle('hidden', !isSuperAdmin(state.email));
+       // Overview stats (history-driven)
+       $('stat-referrals').innerText = p.referralsCount || 0;
+       updateStats();
     };
+
+    const updateStats = () => {
+       const h = state.history || [];
+       $('stat-quizzes').innerText = h.length;
+       if (h.length) {
+          const avg = h.reduce((s, r) => s + (Number(r.percentage) || 0), 0) / h.length;
+          $('stat-avg').innerText = Math.round(avg) + '%';
+       } else {
+          $('stat-avg').innerText = '0%';
+       }
+    };
+
+    // --- History (live via getHistory; demo shows empty) ---
+    const loadHistory = async () => {
+       if (state.demo) { renderHistory(); return; }
+       const res = await api({ type: 'getHistory', email: state.email, token: state.token });
+       if (res.success && Array.isArray(res.history)) {
+          state.history = res.history;
+       } else {
+          state.history = [];
+       }
+       renderHistory();
+       updateStats();
+    };
+
+    const renderHistory = () => {
+       const el = $('history-list');
+       if (!state.history || !state.history.length) {
+          el.innerHTML = 'No history found.';
+          return;
+       }
+       el.innerHTML = state.history.map(r => `
+         <div class="p-4 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[color:var(--card-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+           <div>
+             <div class="font-semibold">${r.subject || 'General'}</div>
+             <div class="text-xs text-[var(--fg-muted)]">${r.date || ''}${r.college ? ' · ' + r.college : ''}</div>
+           </div>
+           <div class="text-[var(--accent)] font-bold">${r.score}/${r.total} (${r.percentage}%)</div>
+         </div>`).join('');
+    };
+    $('btn-refresh-history').onclick = loadHistory;
 
     // --- Profile Logic ---
     
@@ -768,6 +947,144 @@
        const code = $('referral-code-display').innerText;
        navigator.clipboard.writeText(code);
        toast("Code copied!", "success");
+    };
+
+    // Apply a referral code (credits the referrer via backend applyReferral)
+    $('btn-apply-referral').onclick = async () => {
+       const code = $('apply-referral-code').value.trim();
+       if (!code) return toast("Enter a referral code", "error");
+       if (state.demo) return toast("Demo mode — referral not applied", "error");
+       const res = await api({ type: 'applyReferral', email: state.email, token: state.token, code });
+       toast(res.message, res.success ? 'success' : 'error');
+       if (res.success) {
+          $('apply-referral-code').value = '';
+          const pRes = await api({ type: 'getProfile', email: state.email, token: state.token });
+          if (pRes.success) { state.profile = pRes.profile; updateUI(); }
+       }
+    };
+
+    // --- Admin Logic (backend-ready endpoints; Admin role only) ---
+    const loadAdminData = async () => {
+       if (state.demo || !state.isAdmin) return;
+       await Promise.all([loadPendingUsers(), loadUsers()]);
+    };
+
+    const loadPendingUsers = async () => {
+       const el = $('admin-pending-list');
+       el.innerHTML = 'Loading…';
+       const res = await api({ type: 'getPendingUsers', email: state.email, token: state.token });
+       if (!res.success) { el.innerHTML = res.message || 'Failed to load.'; return; }
+       const pending = res.pending || [];
+       // Sidebar badge
+       const badge = $('admin-pending-badge');
+       badge.innerText = pending.length;
+       badge.classList.toggle('hidden', !pending.length);
+       if (!pending.length) { el.innerHTML = 'No pending requests.'; return; }
+       el.innerHTML = pending.map(u => `
+         <div class="p-4 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[color:var(--card-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+           <div>
+             <div class="font-semibold">${u.email}</div>
+             <div class="text-xs text-[var(--fg-muted)]">${u.date || ''}${u.ip ? ' · IP: ' + u.ip : ''}${u.location ? ' · ' + u.location : ''}</div>
+           </div>
+           <button class="btn btn-primary py-2 px-4 text-xs" onclick="approveUser('${u.email}')">Approve</button>
+         </div>`).join('');
+    };
+
+    const approveUser = async (targetEmail) => {
+       if (!confirm(`Approve ${targetEmail}? Credentials will be emailed.`)) return;
+       const res = await api({ type: 'approveUser', email: state.email, token: state.token, targetEmail });
+       toast(res.message, res.success ? 'success' : 'error');
+       if (res.success) loadAdminData();
+    };
+
+    const loadUsers = async () => {
+       const el = $('admin-users-list');
+       el.innerHTML = 'Loading…';
+       const res = await api({ type: 'getUsers', email: state.email, token: state.token });
+       if (!res.success) { el.innerHTML = res.message || 'Failed to load.'; return; }
+       const users = res.users || [];
+       if (!users.length) { el.innerHTML = 'No users found.'; return; }
+       el.innerHTML = users.map(u => `
+         <div class="p-4 rounded-xl bg-[rgba(255,255,255,0.02)] border border-[color:var(--card-border)]">
+           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+             <div class="flex items-center gap-3 min-w-0">
+               <img src="${u.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.fullName || 'U')}&background=random`}" class="w-8 h-8 rounded-full object-cover" />
+               <div class="min-w-0">
+                 <div class="font-semibold truncate">${u.fullName || u.email}</div>
+                 <div class="text-xs text-[var(--fg-muted)] truncate">${u.email} · ${u.role || 'User'} · ${u.activeStatus || ''}</div>
+               </div>
+             </div>
+             <div class="flex gap-2 flex-wrap">
+               <button class="btn btn-secondary py-1.5 px-3 text-xs" onclick="toggleBlockUser('${u.email}')">${u.isBlocked ? 'Unblock' : 'Block'}</button>
+               <button class="btn btn-secondary py-1.5 px-3 text-xs" onclick="forceLogoutUser('${u.email}')">Force Logout</button>
+             </div>
+           </div>
+           <div class="text-xs text-[var(--fg-muted)] mt-2">Status: ${u.status || ''} · Logins: ${u.loginCount || 0}${u.isBlocked ? ' · <span class="text-red-400 font-semibold">Blocked</span>' : ''}</div>
+         </div>`).join('');
+    };
+
+    const toggleBlockUser = async (targetEmail) => {
+       const res = await api({ type: 'toggleBlock', email: state.email, token: state.token, targetEmail });
+       toast(res.success ? 'Block status updated' : res.message, res.success ? 'success' : 'error');
+       if (res.success) loadUsers();
+    };
+
+    const forceLogoutUser = async (targetEmail) => {
+       if (!confirm(`Force logout ${targetEmail}?`)) return;
+       const res = await api({ type: 'forceLogout', email: state.email, token: state.token, targetEmail });
+       toast(res.message, res.success ? 'success' : 'error');
+       if (res.success) loadUsers();
+    };
+
+    $('btn-refresh-admin').onclick = loadAdminData;
+
+    $('btn-add-mcq').onclick = async () => {
+       const subject = $('mcq-subject').value.trim();
+       const college = $('mcq-college').value.trim();
+       const qnumber = $('mcq-qnumber').value.trim();
+       const question = $('mcq-question').value.trim();
+       const optionA = $('mcq-optA').value.trim();
+       const optionB = $('mcq-optB').value.trim();
+       const optionC = $('mcq-optC').value.trim();
+       const optionD = $('mcq-optD').value.trim();
+       const answer = $('mcq-answer').value;
+       if (!subject || !question || !optionA || !optionB || !optionC || !optionD) return toast("Fill subject, question and all 4 options", "error");
+       const res = await api({
+          type: 'addMCQ', email: state.email, token: state.token,
+          subject, college, qnumber, question, optionA, optionB, optionC, optionD, answer,
+          image: $('mcq-image').value.trim(), explanation: $('mcq-explanation').value.trim(),
+          correctText: $('mcq-correctText').value.trim(),
+          fbA: $('mcq-fbA').value.trim(), fbB: $('mcq-fbB').value.trim(),
+          fbC: $('mcq-fbC').value.trim(), fbD: $('mcq-fbD').value.trim()
+       });
+       toast(res.message, res.success ? 'success' : 'error');
+       if (res.success) {
+          ['mcq-subject','mcq-college','mcq-qnumber','mcq-question','mcq-optA','mcq-optB','mcq-optC','mcq-optD','mcq-image','mcq-correctText','mcq-explanation','mcq-fbA','mcq-fbB','mcq-fbC','mcq-fbD'].forEach(id => $(id).value = '');
+          initDashboard();
+       }
+    };
+
+    $('btn-delete-mcq').onclick = async () => {
+       const qnumber = $('del-qnumber').value.trim();
+       if (!qnumber) return toast("Enter Q Number", "error");
+       if (!confirm(`Delete MCQ ${qnumber}?`)) return;
+       const res = await api({ type: 'deleteMCQ', email: state.email, token: state.token, qnumber });
+       toast(res.message, res.success ? 'success' : 'error');
+       if (res.success) { $('del-qnumber').value = ''; initDashboard(); }
+    };
+
+    $('btn-add-admin').onclick = async () => {
+       const newEmail = $('newadmin-email').value.trim();
+       const fullName = $('newadmin-name').value.trim();
+       const role = $('newadmin-role').value;
+       const password = $('newadmin-password').value.trim();
+       if (!newEmail || !password) return toast("Email and password required", "error");
+       const res = await api({ type: 'addAdminUser', email: state.email, token: state.token, newEmail, fullName, role, password });
+       toast(res.message, res.success ? 'success' : 'error');
+       if (res.success) {
+          ['newadmin-email','newadmin-name','newadmin-password'].forEach(id => $(id).value = '');
+          loadUsers();
+       }
     };
 
     // --- Quiz Logic ---
@@ -873,9 +1190,12 @@
     // --- Init ---
     const token = localStorage.getItem('mcq_token');
     const email = localStorage.getItem('mcq_email');
+    const savedRole = localStorage.getItem('mcq_role');
     if(token && email) {
        state.token = token;
        state.email = email;
+       state.role = savedRole || 'User';
+       state.isAdmin = state.role === 'Admin';
        initDashboard();
     } else {
        showStep('step-auth');

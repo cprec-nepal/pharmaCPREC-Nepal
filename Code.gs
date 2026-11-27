@@ -259,10 +259,12 @@ function handleRequest(e) {
 
       const pendingData = sheets.pending.getDataRange().getValues();
       let pendingRowIdx = -1;
+      let pendingReferralCode = "";
 
       for(let i=1; i<pendingData.length; i++) {
         if(pendingData[i][1] === targetEmail && pendingData[i][4] === "Pending") {
           pendingRowIdx = i + 1;
+          pendingReferralCode = pendingData[i][5] || "";
           break;
         }
       }
@@ -289,6 +291,22 @@ function handleRequest(e) {
 
       // Update Pending Status
       sheets.pending.getRange(pendingRowIdx, 5).setValue("Approved");
+
+      // Credit Referrer (if referral code was supplied at registration)
+      if (pendingReferralCode) {
+        const allUsers = sheets.verify.getDataRange().getValues();
+        for (let i = 1; i < allUsers.length; i++) {
+          if (allUsers[i][18] === pendingReferralCode && allUsers[i][0] !== targetEmail) {
+            sheets.referrals.appendRow([new Date(), allUsers[i][0], targetEmail, "Success"]);
+            const refRow = getUserRow(allUsers[i][0]);
+            if (refRow > 0) {
+              const currentCount = Number(allUsers[refRow - 1][19]) || 0;
+              sheets.verify.getRange(refRow, 20).setValue(currentCount + 1);
+            }
+            break;
+          }
+        }
+      }
 
       // Send Email
       const senderEmail = "no-reply@mcqs.cprecnepal.org.np";
@@ -356,6 +374,13 @@ function handleRequest(e) {
       }
 
       if (foundRow === -1) {
+        // Distinguish pending-approval from never-registered
+        const pendingData = sheets.pending.getDataRange().getValues();
+        for (let i = 1; i < pendingData.length; i++) {
+          if (pendingData[i][1] === email && pendingData[i][4] === "Pending") {
+            return sendJSON({ success: false, message: "⏳ Account pending admin approval. Please wait for the approval email." });
+          }
+        }
         sheets.deny.appendRow([new Date(), ip || "", location || "", "Not Registered: " + email]);
         return sendJSON({ success: false, message: "🚫 Email not found. Please register first." });
       }
@@ -487,6 +512,32 @@ function handleRequest(e) {
       const { email, subject, college, score, total, percentage } = e.parameter;
       sheets.history.appendRow([new Date(), email, subject, college, score, total, percentage]);
       return sendJSON({ success: true, message: "Score saved" });
+    }
+
+    // GET USER QUIZ HISTORY (token-validated, own history only)
+    if (type === "getHistory") {
+      const { email, token } = e.parameter;
+      const rowIdx = getUserRow(email);
+      if (rowIdx === -1) return sendJSON({ success: false, message: "User not found" });
+      const rows = sheets.verify.getDataRange().getValues();
+      if (rows[rowIdx - 1][4] !== token) return sendJSON({ success: false, message: "Unauthorized" });
+
+      const data = sheets.history.getDataRange().getValues();
+      const history = [];
+      for (let i = 1; i < data.length; i++) {
+        if (data[i][1] === email) {
+          history.push({
+            date: data[i][0] ? new Date(data[i][0]).toLocaleString() : "",
+            subject: data[i][2] || "",
+            college: data[i][3] || "",
+            score: data[i][4],
+            total: data[i][5],
+            percentage: data[i][6]
+          });
+        }
+      }
+      history.reverse(); // newest first
+      return sendJSON({ success: true, history });
     }
 
     // =========================================
