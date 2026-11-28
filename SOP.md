@@ -406,6 +406,13 @@ After successful login, the Dashboard (`step-dashboard`) is displayed.
 - **JSON appears** → backend is fine; the problem is the frontend (`const API` URL mismatch, outdated `index.html`, or the app hosted without `mcqs-npc-data.js`).
 - **Sign-in page / error page /Apps Script error** → backend deployment settings (rows 2–5) or spreadsheet (row 6).
 
+**Sheet-structure check:** open `…/exec?type=diagnose` → returns the spreadsheet name plus every sheet's row count and headers (`{"success":true,"spreadsheet":"…","sheets":{"MCQs":{"rows":101,…}, …}}`). Use it to confirm:
+- the script is opening the **right spreadsheet** (`spreadsheet` name matches yours),
+- which sheets exist and whether they contain **data rows** (`rows` > 1),
+- headers are in the **expected order** (e.g. `MCQs` = Subject, College, QNumber, Question, … — matches Appendix B).
+
+If `diagnose` shows `rows: 0` on a sheet you expected to be filled (e.g. `MCQs` after pasting the NPC CSV), the paste went into the wrong spreadsheet or was never saved — re-do it on the spreadsheet named in the `diagnose` response.
+
 ### SOP-18 — Avatar Upload (Drive)
 
 1. User selects image in Settings (SOP-09) → frontend sends Base64 via `uploadAvatar`.
