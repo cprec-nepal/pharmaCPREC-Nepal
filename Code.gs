@@ -616,6 +616,31 @@ function handleRequest(e) {
       return sendJSON({ success: true, message: "Admin Added" });
     }
 
+    // =========================================
+    // 5. DIAGNOSTICS (safe to open in a browser)
+    // =========================================
+    // Reports sheet structure only (names, row/col counts, headers) — never
+    // user data. Missing sheets/headers are auto-created before this runs,
+    // so a success response also proves initialization worked. Use:
+    //   …/exec?type=diagnose
+    if (type === "diagnose" || type === "setupSheets") {
+      const report = {};
+      Object.keys(sheets).forEach(name => {
+        const sh = sheets[name];
+        const lastCol = sh.getLastColumn();
+        const headers = sh.getLastRow() > 0
+          ? sh.getRange(1, 1, 1, lastCol).getValues()[0].map(v => String(v || ""))
+          : [];
+        report[name] = { rows: sh.getLastRow(), cols: lastCol, headers };
+      });
+      return sendJSON({
+        success: true,
+        spreadsheet: ss.getName(),
+        message: "All sheets verified. Missing sheets/headers were auto-created.",
+        sheets: report
+      });
+    }
+
     return sendJSON({ success: false, message: "Invalid Request" });
 
   } catch (err) {
